@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+TEST_EL = File.expand_path('../../test.el/test-el', __FILE__)
+exec "#{TEST_EL} -I lib test/*"
