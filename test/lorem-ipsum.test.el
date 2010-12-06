@@ -1,5 +1,4 @@
 (require 'lorem-ipsum)
-(require 'test)
 
 (scene "lorem-ipsum"
        (wrap (let ((lorem-ipsum '("abcde abcde abcde abcde" "abcde abcde abcde abcde"))

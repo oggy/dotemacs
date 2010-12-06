@@ -1,5 +1,4 @@
 (require 'word-transforms)
-(require 'test)
 
 (scene "library functions"
        (test "camelize turns a word from snake-case to camel-case"
