@@ -1,0 +1,101 @@
+#!/usr/bin/env ruby
+
+EMACS = '/Applications/Aquamacs.app/Contents/MacOS/Aquamacs'
+ROOT = File.expand_path('..', File.dirname(__FILE__))
+PATHS = ['lib', 'vendor']
+
+require 'optparse'
+require 'fileutils'
+
+class App
+  def initialize(args)
+    @opts = {}
+    parser = OptionParser.new do |parser|
+      parser.banner = <<-EOS.gsub(/^.*\|/, '')
+        |USAGE: #$0 [-f]
+        |
+        |Compile sources files and generate autoload files.
+        |
+        |Do this recursively for all .el files in any given
+        |directories.
+      EOS
+
+      parser.on('-c', '--clean', 'Remove all generated files first.') do
+        @opts[:clean] = true
+      end
+    end
+    parser.parse!(ARGV)
+    @paths = args.empty? ? PATHS : args
+  end
+
+  def run
+    clean(@paths) if @opts[:clean]
+    @sources = find_sources(@paths)
+    compile
+    generate_autoloads
+  end
+
+  private
+
+  def clean(args)
+    args.each do |path|
+      FileUtils.rm_rf("#{ROOT}/var/autoloads/#{path}")
+      if File.directory?(path)
+        system 'find', "#{ROOT}/#{path}", '-name', '*.elc', '-exec', 'rm', '-f', '{}', ';'
+      else
+        FileUtils.rm_f "#{ROOT}/#{path}c"
+      end
+    end
+  end
+
+  def find_sources(args)
+    sources = []
+    args.each do |path|
+      path = File.expand_path(path)
+      File.exist?(path) or
+        next warn "File not found: #{path} - skipping."
+      path.sub!(%r'\A#{Regexp.escape ROOT}/', '') or
+        next warn "File outside #{ROOT}: #{path} - ignoring."
+      if File.directory?(path)
+        sources.concat `find \"#{path}\" -name '*.el'`.split(/\n/)
+      else
+        sources << path
+      end
+    end
+    sources
+  end
+
+  def compile
+    files = @sources.select { |src| stale?("#{src}c", src) }
+    system EMACS, '-batch', '-q', '-f', 'batch-byte-compile', *files
+  end
+
+  def generate_autoloads
+    snippets = @sources.map do |src|
+      dst = "#{ROOT}/var/autoloads/#{src}"
+      src = "#{ROOT}/#{src}"
+      next if !stale?(dst, src)
+
+      <<-EOS
+        (with-current-buffer (autoload-find-file "#{src}")
+          (make-directory "#{File.dirname dst}" t)
+          (setq generated-autoload-file "#{dst}")
+          (update-file-autoloads "#{src}" t))
+      EOS
+    end.join
+    return if snippets.empty?
+    lisp = <<-EOS
+      (progn
+        (require 'autoload)
+        (setq backup-inhibited t)
+        #{snippets})
+    EOS
+    system EMACS, '-batch', '-q', '-eval', lisp.gsub(/\s+/m, ' ').strip
+  end
+
+  def stale?(dst, src)
+    !File.exist?(dst) || File.mtime(dst) < File.mtime(src)
+  end
+end
+
+App.new(ARGV).run
