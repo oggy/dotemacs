@@ -66,6 +66,9 @@
   (one-buffer-one-frame-mode 0)
 
   ;; Used fixed-width font for text modes.
-  (aquamacs-autoface-mode 0))
+  (aquamacs-autoface-mode 0)
+
+  ;; smart-spacing-mode messes up my indenting.
+  (global-smart-spacing-mode 0))
 
 (provide 'g-features)
