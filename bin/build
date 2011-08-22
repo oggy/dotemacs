@@ -2,7 +2,7 @@
 
 EMACS = '/Applications/Aquamacs.app/Contents/MacOS/Aquamacs'
 ROOT = File.expand_path('..', File.dirname(__FILE__))
-PATHS = ['lib', 'vendor']
+PATHS = ["#{ROOT}/lib", "#{ROOT}/vendor"]
 
 require 'optparse'
 require 'fileutils'
@@ -25,12 +25,12 @@ class App
       end
     end
     parser.parse!(ARGV)
-    @paths = args.empty? ? PATHS : args
+    @paths = (args.empty? ? PATHS : args).map { |path| File.expand_path(path) }
   end
 
   def run
     clean(@paths) if @opts[:clean]
-    @sources = find_sources(@paths)
+    @sources = find_sources
     compile
     generate_autoloads
   end
@@ -41,28 +41,28 @@ class App
     args.each do |path|
       FileUtils.rm_rf("#{ROOT}/var/autoloads/#{path}")
       if File.directory?(path)
-        system 'find', "#{ROOT}/#{path}", '-name', '*.elc', '-exec', 'rm', '-f', '{}', ';'
+        system 'find', path, '-name', '*.elc', '-exec', 'rm', '-f', '{}', ';'
       else
-        FileUtils.rm_f "#{ROOT}/#{path}c"
+        FileUtils.rm_f "#{path}c"
       end
     end
   end
 
-  def find_sources(args)
-    sources = []
-    args.each do |path|
-      path = File.expand_path(path)
-      File.exist?(path) or
-        next warn "File not found: #{path} - skipping."
-      path.sub!(%r'\A#{Regexp.escape ROOT}/', '') or
-        next warn "File outside #{ROOT}: #{path} - ignoring."
-      if File.directory?(path)
-        sources.concat `find \"#{path}\" -name '*.el'`.split(/\n/)
-      else
-        sources << path
-      end
-    end
-    sources
+  def rc_load_path
+    @paths.map do |path|
+      `find \"#{path}\" -type d`.split(/\n/)
+    end.flatten
+  end
+
+  def rc_load_path_as_list
+    quoted_dirs = rc_load_path.map { |dir| "\"#{dir}\"" }
+    "(list #{quoted_dirs.join(' ')})"
+  end
+
+  def find_sources
+    rc_load_path.map do |path|
+      Dir["#{path}/*.el"]
+    end.flatten
   end
 
   def compile

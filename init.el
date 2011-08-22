@@ -10,7 +10,11 @@
 (defun add-to-load-path (path)
   (interactive)
   "Add PATH to the front of `load-path'."
-  (setq load-path (cons path load-path)))
+  (setq load-path (cons path load-path))
+  (mapc (lambda (p)
+          (if (file-directory-p p)
+              (add-to-load-path p)))
+        (directory-files path t "^[^.]")))
 
 (add-to-load-path (rc-path "init"))
 (add-to-load-path (rc-path "lib"))
