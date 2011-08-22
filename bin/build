@@ -12,7 +12,7 @@ class App
     @opts = {}
     parser = OptionParser.new do |parser|
       parser.banner = <<-EOS.gsub(/^.*\|/, '')
-        |USAGE: #$0 [-f]
+        |USAGE: #$0 [-c]
         |
         |Compile sources files and generate autoload files.
         |
