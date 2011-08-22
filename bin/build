@@ -67,7 +67,14 @@ class App
 
   def compile
     files = @sources.select { |src| stale?("#{src}c", src) }
-    system EMACS, '-batch', '-q', '-f', 'batch-byte-compile', *files
+    # aquamacs-mode-defaults adds edit-modes directories to the load path
+    lisp = <<-EOS
+      (progn
+        (require 'aquamacs)
+        (require 'aquamacs-aux)
+        (require 'aquamacs-mode-defaults)
+    EOS
+    system EMACS, '-batch', '-q', '-eval', lisp.gsub(/\s+/m, ' '), '-f', 'batch-byte-compile', *files
   end
 
   def generate_autoloads
