@@ -4,8 +4,8 @@
 (defvar g-pc-bufsw-mode-map (make-sparse-keymap 'g-pc-bufsw-mode-map)
   "Keymap for `pc-bufsw-mode'.")
 
-(define-key g-pc-bufsw-mode-map (kbd "M-TAB") 'pc-bufsw::previous)
-(define-key g-pc-bufsw-mode-map (kbd "M-S-TAB") 'pc-bufsw::lru)
+(define-key g-pc-bufsw-mode-map (kbd "M-]") 'pc-bufsw::previous)
+(define-key g-pc-bufsw-mode-map (kbd "M-[") 'pc-bufsw::lru)
 
 (defvar g-pc-bufsw-mode nil
   "Toggle var for g-pc-bufsw-mode.")

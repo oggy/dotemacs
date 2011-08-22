@@ -1,5 +1,4 @@
-;; TODO: M-S-TAB broken on Aquamacs 2.1
-;(g-pc-bufsw-mode)
+(g-pc-bufsw-mode)
 
 ;; Enable redo.
 (require 'redo)
