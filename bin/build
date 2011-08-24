@@ -72,15 +72,16 @@ class App
       (progn
         (require 'aquamacs)
         (require 'aquamacs-aux)
-        (require 'aquamacs-mode-defaults)
+        (require 'aquamacs-mode-defaults))
     EOS
-    system EMACS, '-batch', '-q', '-eval', lisp.gsub(/\s+/m, ' '), '-f', 'batch-byte-compile', *files
+    load_path_args = rc_load_path.map { |dir| ['--directory', dir] }
+    system *[EMACS, '-batch', '-q', load_path_args, '-eval', lisp.gsub(/\s+/m, ' '), '-f', 'batch-byte-compile', *files].flatten
   end
 
   def generate_autoloads
     snippets = @sources.map do |src|
-      dst = "#{ROOT}/var/autoloads/#{src}"
-      src = "#{ROOT}/#{src}"
+      dst = src.sub(ROOT, "#{ROOT}/var/autoloads")
+      #dst = "#{ROOT}/var/autoloads/#{src}"
       next if !stale?(dst, src)
 
       <<-EOS
