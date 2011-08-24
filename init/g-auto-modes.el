@@ -34,5 +34,6 @@ any file with that extension should be loaded with MODE."
 (auto-mode 'metafont-mode "\\.mf\\'")
 (auto-mode 'metapost-mode "\\.mp\\'")
 (auto-mode 'conf-mode 'cnf)  ; e.g., my.cnf
+(auto-mode 'scala-mode 'scala)
 
 (provide 'g-auto-modes)
