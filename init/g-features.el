@@ -61,7 +61,8 @@
 (rails-mode 1)
 
 ;; Start server.
-(server-start)
+(unless (server-running-p)
+  (server-start))
 
 (when aquamacsp
   ;; Prevent Aquamacs from opening every buffer in a new frame.
