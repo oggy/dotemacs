@@ -1,0 +1,3 @@
+class #{module} < #{superclass}
+  -!-
+end

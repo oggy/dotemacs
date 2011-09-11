@@ -57,6 +57,9 @@
 ;; not seem to work for this in Aquamacs 2.1.)
 (setq initial-major-mode 'emacs-lisp-mode)
 
+;; Detect Rails projects.
+(rails-mode 1)
+
 ;; Start server.
 (server-start)
 
