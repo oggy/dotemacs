@@ -68,7 +68,9 @@
               ((rails-under-path-p path "app/controllers")
                (rails-initialize-controller-buffer path "app/controllers"))
               ((rails-under-path-p path "app/helpers")
-               (rails-initialize-helper-buffer path "app/helpers")))))))
+               (rails-initialize-helper-buffer path "app/helpers"))
+              ((rails-under-path-p path "db/migrate")
+               (rails-initialize-migration-buffer path "db/migrate")))))))
 
 (defun rails-current-buffer-empty-p ()
   (interactive)
@@ -113,6 +115,14 @@
          (vars (make-hash-table :test 'equal)))
     (puthash "module" module vars)
     (rails-load-template (concat rails-templates-directory "/helper.rb") vars)))
+
+(defun rails-initialize-migration-buffer (path prefix)
+  (let* ((relative-path (rails-strip-prefix path prefix))
+         (stem (replace-regexp-in-string "\\`\\(?:[0-9]+_\\)?\\(.*?\\)\\.rb\\'" "\\1" relative-path))
+         (module (rails-camelize stem))
+         (vars (make-hash-table :test 'equal)))
+    (puthash "module" module vars)
+    (rails-load-template (concat rails-templates-directory "/migration.rb") vars)))
 
 (defun rails-load-template (path vars)
   (rails-insert-template path vars)
