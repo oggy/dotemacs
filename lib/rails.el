@@ -125,10 +125,12 @@
     (rails-load-template (concat rails-templates-directory "/migration.rb") vars)))
 
 (defun rails-load-template (path vars)
-  (rails-insert-template path vars)
-  (goto-char (point-min))
-  (when (search-forward "-!-" nil t)
-    (delete-char -3)))
+  (let ((original-buffer-modified-p (buffer-modified-p)))
+    (rails-insert-template path vars)
+    (goto-char (point-min))
+    (when (search-forward "-!-" nil t)
+      (delete-char -3))
+    (set-buffer-modified-p original-buffer-modified-p)))
 
 (defun rails-insert-template (path vars)
   (insert-file-contents path)
