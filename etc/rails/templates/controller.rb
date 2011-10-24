@@ -3,7 +3,7 @@ class #{module} < ApplicationController
   before_filter :load_#{resource}, only: [:show, :edit, :update, :destroy]
 
   def index
-    @#{resources} = #{model}.page(1).per_page(20)
+    @#{resources} = #{model}.page(1).per(20)
   end
 
   def new
