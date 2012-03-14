@@ -31,7 +31,7 @@ class #{module} < ApplicationController
       redirect_to #{resource}_path(@#{resource})
     else
       flash_error
-      render :new
+      render :edit
     end
   end
 
