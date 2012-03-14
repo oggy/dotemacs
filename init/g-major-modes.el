@@ -53,6 +53,11 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;; must come after activating font-lock-mode in the hook
 (add-hook 'c++-mode-hook 'g-cc-init-buffer t)
 
+;;;; CoffeeScript
+
+(g-when-starting-mode coffee
+  (setq tab-width 2))
+
 ;;;; Java
 
 (g-when-starting-mode java

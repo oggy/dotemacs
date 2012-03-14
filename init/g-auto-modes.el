@@ -19,6 +19,7 @@ any file with that extension should be loaded with MODE."
 
 (auto-mode 'c++-mode 'ut)
 (auto-mode 'css-mode 'scss)
+(auto-mode 'coffee-mode 'coffee)
 (auto-mode 'objc-mode 'm)
 (auto-mode 'd-mode 'd 'di)
 (auto-mode 'ruby-mode 'rb 'rjs 'rake 'rsel 'god 'to_json "[Rr]akefile$" "Capfile" "Gemfile" ".autotest")
