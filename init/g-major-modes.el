@@ -58,6 +58,13 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-when-starting-mode coffee
   (setq tab-width 2))
 
+;;;; Comint (inferior shells)
+
+(add-hook 'comint-exec-hook 'g-comint-clear-query-on-exit)
+
+(defun g-comint-clear-query-on-exit ()
+  (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
+
 ;;;; Java
 
 (g-when-starting-mode java
