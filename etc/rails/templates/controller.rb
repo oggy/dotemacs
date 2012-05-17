@@ -48,6 +48,7 @@ class #{module} < ApplicationController
   end
 
   def load_#{resource}
-    @#{resource} = #{model}.find_by_id(params[:id])
+    @#{resource} = #{model}.find_by_id(params[:id]) or
+      render status: 404, text: 'Not Found'
   end
 end
