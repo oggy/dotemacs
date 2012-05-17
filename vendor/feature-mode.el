@@ -1,6 +1,10 @@
-;; cucumber.el -- Emacs mode for editing plain text user stories
-;;
-;; Copyright (C) 2008 — 2010 Michael Klishin and other contributors
+;;; feature-mode.el --- Major mode for editing Gherkin (i.e. Cucumber) user stories
+;;; Version: 0.4
+;;; Author: Michael Klishin
+;;; URL: https://github.com/michaelklishin/cucumber.el
+;;; Uploader: Kao Félix
+
+;; Copyright (C) 2008 — 2012 Michael Klishin and other contributors
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
@@ -14,7 +18,7 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;; Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110.
 ;;
 ;; Copy files to ~/.emacs.d/elisp/feature-mode and add this to your
 ;; .emacs to load the mode
@@ -28,7 +32,10 @@
 ;; ;; and load it
 ;; (require 'feature-mode)
 ;; (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
-;; 
+;;
+;; If using RVM, set `feature-use-rvm' to `t' to enable RVM
+;; support. This requires `rvm.el'.
+;;
 ;; Language used in feature file is automatically detected from
 ;; "language: [2-letter ISO-code]" tag in feature file.  You can
 ;; choose the language feature-mode should use in case autodetection
@@ -39,7 +46,7 @@
 ;; Translations are loaded from ~/.emacs.d/elisp/feature-mode/i18n.yml
 ;; by default.  You can configure feature-mode to load translations
 ;; directly from cucumber languages.yml or gherkin i18n.yml.  Just add
-;; (setq feature-default-i18n-file 
+;; (setq feature-default-i18n-file
 ;;  "/usr/lib/ruby/gems/1.8/gems/cucumber-0.4.4/lib/cucumber/languages.yml")
 ;; to your .emacs before
 ;; (require 'feature-mode)
@@ -76,6 +83,16 @@
 (eval-when-compile (require 'cl))
 (require 'thingatpt)
 
+(defcustom feature-cucumber-command "rake cucumber CUCUMBER_OPTS=\"{options}\" FEATURE=\"{feature}\""
+  "set this variable to the command, which should be used to execute cucumber scenarios."
+  :group 'feature-mode
+  :type 'string)
+
+(defcustom feature-use-rvm nil
+  "t when RVM is in use. (Requires rvm.el)"
+  :type 'boolean
+  :group 'feature-mode)
+
 ;;
 ;; Keywords and font locking
 ;;
@@ -87,7 +104,7 @@
 (defun load-gherkin-i10n (filename)
   "Read and parse Gherkin l10n from given file."
   (interactive "Load l10n file: ")
-  (with-temp-buffer 
+  (with-temp-buffer
     (insert-file-contents filename)
     (parse-gherkin-l10n)))
 
@@ -102,9 +119,9 @@
                   (kwds-beg (+ (point) 1))
                   (kwds-end (progn (try-find-next-language) (point))))
               (add-to-list
-               'languages-alist 
-               (cons 
-                (filter-buffer-substring lang-beg lang-end) 
+               'languages-alist
+               (cons
+                (filter-buffer-substring lang-beg lang-end)
                 (parse-gherkin-l10n-translations kwds-beg kwds-end)))))))
     (nreverse languages-alist)))
 
@@ -132,9 +149,9 @@
           (if (try-find-next-translation)
               (let ((kwname (match-string-no-properties 1))
                     (kw     (match-string-no-properties 2)))
-                (add-to-list 
+                (add-to-list
                  'translations-alist
-                 (cons 
+                 (cons
                   (intern kwname)
                   (if (or (equal kwname "name")
                           (equal kwname "native"))
@@ -147,21 +164,22 @@
   (concat "^[ \t]*\\(" (replace-regexp-in-string "|" "\\\\|" keyword) "\\):?"))
 
 (defvar feature-default-language "en")
-(defvar feature-default-i18n-file "~/.emacs.d/elisp/feature-mode/i18n.yml")
+(defvar feature-default-directory "features")
+(defvar feature-default-i18n-file (expand-file-name (concat (file-name-directory load-file-name) "/i18n.yml")))
 
 (defconst feature-keywords-per-language
   (if (file-readable-p feature-default-i18n-file)
       (load-gherkin-i10n feature-default-i18n-file)
-  '(("en" . ((feature    . "^ *Feature:")
-             (background . "^ *Background:")
-             (scenario   . "^ *Scenario:")
-             (scenario_outline . 
-                           "^ *Scenario Outline:")
-             (given      . "^ *Given")
-             (when       . "^ *When")
-             (then       . "^ *Then")
-             (but        . "^ *But")
-             (and        . "^ *And")
+  '(("en" . ((feature    . "^ *\\(Feature\\):?")
+             (background . "^ *\\(Background\\):?")
+             (scenario   . "^ *\\(Scenario\\):?")
+             (scenario_outline .
+                           "^ *\\(Scenario Outline\\):?")
+             (given      . "^ *\\(Given\\)")
+             (when       . "^ *\\(When\\)")
+             (then       . "^ *\\(Then\\)")
+             (but        . "^ *\\(But\\)")
+             (and        . "^ *\\(And\\)")
              (examples   . "^ *\\(Examples\\|Scenarios\\):?"))))))
 
 (defconst feature-font-lock-keywords
@@ -225,6 +243,9 @@
 (defun feature-scenario-re (language)
   (cdr (assoc 'scenario (cdr (assoc language feature-keywords-per-language)))))
 
+(defun feature-background-re (language)
+  (cdr (assoc 'background (cdr (assoc language feature-keywords-per-language)))))
+
 ;;
 ;; Variables
 ;;
@@ -251,7 +272,8 @@
         (forward-line -1))
       (+ (current-indentation)
          (if (or (looking-at (feature-feature-re (feature-detect-language)))
-                 (looking-at (feature-scenario-re (feature-detect-language))))
+                 (looking-at (feature-scenario-re (feature-detect-language)))
+                 (looking-at (feature-background-re (feature-detect-language))))
              feature-indent-offset 0)))))
 
 (defun feature-indent-line ()
@@ -329,6 +351,7 @@ back-dent the line by `feature-indent-offset' spaces.  On reaching column
   (feature-minor-modes)
   (run-mode-hooks 'feature-mode-hook))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.feature\\'" . feature-mode))
 
 ;;
@@ -369,7 +392,7 @@ are loaded on startup.  If nil, don't load snippets.")
       (end-of-line)
       (unless (re-search-backward (feature-scenario-name-re (feature-detect-language)) nil t)
         (error "Unable to find an scenario"))
-      (match-string-no-properties 1))))
+      (match-string-no-properties 2))))
 
 (defun feature-verify-scenario-at-pos (&optional pos)
   "Run the scenario defined at pos.  If post is not specified the current buffer location will be used."
@@ -408,21 +431,23 @@ are loaded on startup.  If nil, don't load snippets.")
 
   (let ((opts-str    (mapconcat 'identity cuke-opts " "))
         (feature-arg (if feature-file
-                         (concat " FEATURE='" feature-file "'")
-                         "")))
+                         feature-file
+                       feature-default-directory)))
     (ansi-color-for-comint-mode-on)
     (let ((default-directory (feature-project-root)))
-      (compile (concat "rake cucumber CUCUMBER_OPTS=\"" opts-str "\"" feature-arg) t)))
+      (if feature-use-rvm
+          (rvm-activate-corresponding-ruby))
+      (compile (concat (replace-regexp-in-string "\{options\}" opts-str
+                        (replace-regexp-in-string "\{feature\}" feature-arg feature-cucumber-command))) t)))
   (end-of-buffer-other-window 0))
 
 (defun feature-escape-scenario-name (scenario-name)
   "Escapes all the characaters in a scenario name that mess up using in the -n options"
   (replace-regexp-in-string "\\(\"\\)" "\\\\\\\\\\\\\\1" (replace-regexp-in-string "\\([()\']\\|\\[\\|\\]\\)" "\\\\\\1" scenario-name)))
 
-(declare-function rspec-parent-directory "rspec" t)
 (defun feature-root-directory-p (a-directory)
   "Tests if a-directory is the root of the directory tree (i.e. is it '/' on unix)."
-  (equal a-directory (rspec-parent-directory a-directory)))
+  (equal a-directory (file-name-directory (directory-file-name a-directory))))
 
 (defun feature-project-root (&optional directory)
   "Finds the root directory of the project by walking the directory tree until it finds Rakefile (presumably, application root)"
@@ -433,19 +458,19 @@ are loaded on startup.  If nil, don't load snippets.")
       (feature-project-root (file-name-directory (directory-file-name directory))))))
 
 (defun feature-goto-step-definition ()
-  "Goto the step-definition under (point).  Requires ruby"
+  "Goto the step-definition under (point).  Requires ruby."
   (interactive)
   (let* ((root (feature-project-root))
          (input (thing-at-point 'line))
          (_ (set-text-properties 0 (length input) nil input))
-         (result (shell-command-to-string (format "cd %S && ruby %S/go_to_step.rb %S"
+         (result (shell-command-to-string (format "cd %S && ruby %S/find_step.rb %S"
                                                   root
                                                   feature-support-directory
                                                   input)))
          (file-and-line (car (split-string result "\n")))
          (matched? (string-match "^\\(.+\\):\\([0-9]+\\)$" file-and-line)))
     (if matched?
-        (let ((file                   (format "%s/%s" root (match-string 1 file-and-line)))
+        (let ((file    (format "%s/%s" root (match-string 1 file-and-line)))
               (line-no (string-to-number (match-string 2 file-and-line))))
           (find-file file)
           (goto-char (point-min))
@@ -456,3 +481,4 @@ are loaded on startup.  If nil, don't load snippets.")
 
 (provide 'cucumber-mode)
 (provide 'feature-mode)
+;;; feature-mode.el ends here
