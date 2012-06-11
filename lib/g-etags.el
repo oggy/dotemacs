@@ -1,10 +1,5 @@
 (eval-and-compile (require 'em-glob))
 
-;; For some reason, the built-in etags lib is not being loaded. We
-;; only use the etags-bin variable from it, so just define it here.
-(defvar etags-bin "etags"
-  "The etags executable.")
-
 ;;;###autoload
 (defun g-etags-make-tags-file (glob out)
   "Output a tags file OUT for files matching GLOB.
