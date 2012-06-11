@@ -8,7 +8,8 @@
     (condition-case nil
         (progn
           (while (not (zerop count))
-            (forward-line sign)
+            (when (/= (forward-line sign) 0)
+              (error))
             (setq s (save-excursion
                       (back-to-indentation)
                       (current-column))
