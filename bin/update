@@ -7,3 +7,4 @@ curl https://raw.github.com/superbobry/io-mode/master/io-mode.el > vendor/io-mod
 curl https://raw.github.com/senny/rvm.el/master/rvm.el > vendor/rvm.el
 curl https://raw.github.com/nex3/sass-mode/master/sass-mode.el > vendor/sass-mode.el
 curl https://raw.github.com/yoshiki/yaml-mode/master/yaml-mode.el > vendor/yaml-mode.el
+curl https://raw.github.com/immerrr/lua-mode/master/lua-mode.el > vendor/lua-mode.el
