@@ -56,7 +56,10 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;;;; CoffeeScript
 
 (g-when-starting-mode coffee
-  (setq tab-width 2))
+  (setq coffee-tab-width 2))
+(g-define-mode-keys coffee
+  "RET"  'newline
+  "\C-m" 'newline)
 
 ;;;; Comint (inferior shells)
 
