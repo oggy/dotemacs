@@ -97,15 +97,15 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (if (zerop (buffer-size))
     (g-feature-insert-skeleton)))
 
-;; Javascript
+;; JS
 
-(g-define-mode-keys javascript
-  "C-c l" 'g-javascript-insert-console-log)
+(g-define-mode-keys js
+  "C-c l" 'g-js-insert-console-log)
 
-(g-when-starting-mode javascript
-  (setq javascript-indent-level 2))
+(g-when-starting-mode js
+  (setq js-indent-level 2))
 
-(defun g-javascript-insert-console-log ()
+(defun g-js-insert-console-log ()
   "Insert 'console.log()', and place point between the parentheses."
   (interactive)
   (insert "console.log(")
