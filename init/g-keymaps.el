@@ -39,6 +39,7 @@
 (define-key (current-global-map) (kbd "C-x C-c C-x C-c") 'save-buffers-kill-emacs)
 
 ;;; Modes
+(global-set-key (kbd "C-c m a") 'js-mode)
 (global-set-key (kbd "C-c m c") 'c-mode)
 (global-set-key (kbd "C-c m d") 'diff-mode)
 (global-set-key (kbd "C-c m e") 'emacs-lisp-mode)
@@ -68,6 +69,7 @@
 (global-set-key (kbd "C-c x")   'g-toggle-debug-on-error)
 (global-set-key (kbd "C-c R")   'g-reload-buffer)
 (global-set-key (kbd "C-c b")   'browse-url-at-point)
+(global-set-key (kbd "C-c s")   'shell)
 (global-set-key (kbd "C-c TAB") 'g-toggle-tab-width)
 (global-set-key (kbd "C-c X X") 'g-delete-this-file)
 (global-set-key (kbd "C-x SPC") 'g-reselect-region)
