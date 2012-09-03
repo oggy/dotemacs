@@ -1,10 +1,15 @@
 #!/bin/sh
 
+mkdir -p vendor/clojure-mode
+curl https://raw.github.com/technomancy/clojure-mode/master/clojure-mode.el > vendor/clojure-mode/clojure-mode.el
+curl https://raw.github.com/technomancy/clojure-mode/master/clojure-test-mode.el > vendor/clojure-mode/clojure-test-mode.el
+curl https://raw.github.com/technomancy/clojure-mode/master/clojurescript-mode.el > vendor/clojure-mode/clojurescript-mode.el
+
 curl https://raw.github.com/defunkt/coffee-mode/master/coffee-mode.el > vendor/coffee-mode.el
 curl https://raw.github.com/michaelklishin/cucumber.el/master/feature-mode.el > vendor/feature-mode.el
 curl https://raw.github.com/nex3/haml-mode/master/haml-mode.el > vendor/haml-mode.el
 curl https://raw.github.com/superbobry/io-mode/master/io-mode.el > vendor/io-mode.el
+curl https://raw.github.com/immerrr/lua-mode/master/lua-mode.el > vendor/lua-mode.el
 curl https://raw.github.com/senny/rvm.el/master/rvm.el > vendor/rvm.el
 curl https://raw.github.com/nex3/sass-mode/master/sass-mode.el > vendor/sass-mode.el
 curl https://raw.github.com/yoshiki/yaml-mode/master/yaml-mode.el > vendor/yaml-mode.el
-curl https://raw.github.com/immerrr/lua-mode/master/lua-mode.el > vendor/lua-mode.el
