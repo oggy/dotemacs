@@ -49,7 +49,7 @@
 (global-set-key (kbd "C-c m m") 'makefile-mode)
 (global-set-key (kbd "C-c m o") 'objc-mode)
 (global-set-key (kbd "C-c m p") 'perl-mode)
-(global-set-key (kbd "C-c m q") 'text-mode)
+(global-set-key (kbd "C-c m q") 'fundamental-mode)
 (global-set-key (kbd "C-c m r") 'ruby-mode)
 (global-set-key (kbd "C-c m s") 'sh-mode)
 (global-set-key (kbd "C-c m x") 'c++-mode)
