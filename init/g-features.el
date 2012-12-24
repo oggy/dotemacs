@@ -60,6 +60,11 @@
 ;; Detect Rails projects.
 (rails-mode 1)
 
+;; No thanks.
+(when (functionp 'global-smart-spacing-mode)
+  (global-smart-spacing-mode 0))
+(remove-hook 'text-mode-hook 'smart-spacing-mode)
+
 ;; Start server.
 (unless (server-running-p)
   (server-start))
