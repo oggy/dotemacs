@@ -60,7 +60,22 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (setq coffee-tab-width 2))
 (g-define-mode-keys coffee
   "RET"  'newline
-  "\C-m" 'newline)
+  "\C-m" 'newline
+  "\C-c \C-c" 'g-coffee-visit-js)
+
+(defun g-coffee-visit-js ()
+  (interactive)
+  (let ((coffee-path (buffer-file-name))
+        js-path)
+    (if (string-match "\\.coffee\\'" coffee-path)
+        (progn
+          (if (buffer-modified-p)
+              (error "Save buffer first."))
+          (call-process "coffee" nil nil nil "-c" (buffer-file-name))
+          (setq js-path (replace-match ".js" t t coffee-path))
+          (switch-to-buffer (find-file-noselect js-path t))
+          (find-file js-path))
+      (error "Cannot deduce javascript name because this file does not end in '.coffee'"))))
 
 ;;;; Comint (inferior shells)
 
@@ -101,7 +116,8 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;; JS
 
 (g-define-mode-keys js
-  "C-c l" 'g-js-insert-console-log)
+  "C-c l" 'g-js-insert-console-log
+  "C-c C-c" 'g-js-visit-coffee)
 
 (g-when-starting-mode js
   (setq js-indent-level 2))
@@ -111,6 +127,16 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (interactive)
   (insert "console.log(")
   (save-excursion (insert ");")))
+
+(defun g-js-visit-coffee ()
+  (interactive)
+  (let ((js-path (buffer-file-name))
+        coffee-path)
+    (if (string-match "\\.js\\'" js-path)
+        (progn
+          (setq coffee-path (replace-match ".coffee" t t js-path))
+          (find-file coffee-path))
+      (error "Cannot deduce javascript name because this file does not end in '.coffee'"))))
 
 ;; HTML
 
