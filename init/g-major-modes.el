@@ -55,6 +55,7 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 
 ;;;; CoffeeScript
 
+(defvar coffee-tab-width 2)
 (g-when-starting-mode coffee
   (setq coffee-tab-width 2))
 (g-define-mode-keys coffee
