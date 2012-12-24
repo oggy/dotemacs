@@ -1,3 +1,13 @@
+(when aquamacsp
+  ;; Remove osx-key bindings that I keep hitting by accident.
+  (define-key osx-key-mode-map (kbd "A-q") nil)
+  (define-key osx-key-mode-map (kbd "A-w") nil)
+  (define-key osx-key-mode-map (kbd "A-n") nil)
+  (define-key osx-key-mode-map (kbd "A-t") nil)
+  (define-key osx-key-mode-map (kbd "A-p") nil)
+  (define-key osx-key-mode-map (kbd "A-<backspace>") nil)
+  (define-key osx-key-mode-map (kbd "C-x w") nil))
+
 ;;; Overrides (or non-\C-c)
 (global-set-key (kbd "C-x w")   'g-save-buffer-rename)
 (global-set-key (kbd "C-x C-x") 'g-exchange-point-and-mark)
@@ -23,15 +33,6 @@
 (global-set-key (kbd "C-S-TAB") 'g-select-previous-window)
 (global-set-key (kbd "C-S-t")   'g-transpose-line-down)
 (global-set-key (kbd "M-g")     'goto-line)
-
-(when aquamacsp
-  ;; Remove osx-key bindings that I keep hitting by accident.
-  (define-key osx-key-mode-map (kbd "A-q") 'undefined)
-  (define-key osx-key-mode-map (kbd "A-w") 'undefined)
-  (define-key osx-key-mode-map (kbd "A-n") 'undefined)
-  (define-key osx-key-mode-map (kbd "A-t") 'undefined)
-  (define-key osx-key-mode-map (kbd "A-p") 'undefined)
-  (define-key osx-key-mode-map (kbd "A-<backspace>") 'undefined))
 
 ;; Make the quit sequence less accident-prone.
 (global-unset-key (kbd "C-x C-c"))
