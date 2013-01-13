@@ -18,6 +18,7 @@ it."
       (indent-for-tab-command))))
 
 (put 'c-mode 'g-block-end-delimiter "}")
+(put 'css-mode 'g-block-end-delimiter "}")
 (put 'd-mode 'g-block-end-delimiter "}")
 (put 'c++-mode 'g-block-end-delimiter "}")
 (put 'java-mode 'g-block-end-delimiter "}")
