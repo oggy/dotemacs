@@ -1,0 +1,12 @@
+# name: Base page template
+# key: page
+# --
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>$1</title>
+  </head>
+  <body>
+    $0
+  </body>
+</html>

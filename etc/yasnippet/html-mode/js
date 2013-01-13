@@ -1,0 +1,6 @@
+# name: Javascript Tag
+# key: js
+# --
+<script type="text/javascript">
+  $0
+</script>
