@@ -178,6 +178,11 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-define-mode-keys cperl
   "TAB" 'g-indent-for-tab-command)
 
+;;;; Python
+
+(g-when-starting-mode python
+  (modify-syntax-entry ?_ "_" py-mode-syntax-table))
+
 ;;;; Ruby
 
 (require 'inf-ruby)
