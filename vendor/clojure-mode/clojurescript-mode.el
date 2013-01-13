@@ -1,6 +1,6 @@
 ;;; clojurescript-mode.el --- Major mode for ClojureScript code
 
-;; Copyright (C) 2011 Luke Amdor
+;; Copyright © 2011 Luke Amdor
 ;;
 ;; Authors: Luke Amdor <luke.amdor@gmail.com>
 ;; URL: http://github.com/rubbish/clojurescript-mode
@@ -39,6 +39,12 @@
 
 (require 'clojure-mode)
 
+(eval-when-compile
+  (defvar paredit-mode)
+  (defvar paredit-version))
+
+(declare-function slime-mode "slime.el")
+
 (defvar clojurescript-home
   (getenv "CLOJURESCRIPT_HOME")
   "Path to ClojureScript home directory")
@@ -65,7 +71,9 @@
 
 (defun clojurescript-eval-last-expression ()
   (interactive)
-  (let ((expr (slime-last-expression)))
+  (let ((expr (buffer-substring-no-properties
+               (save-excursion (backward-sexp) (point))
+               (point))))
     (comint-send-string (inferior-lisp-proc) (concat expr "\n"))))
 
 (defun clojurescript-compile-and-load-file ()
@@ -89,7 +97,7 @@
 (put-clojure-indent 'this-as 'defun)
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.cljs$" . clojurescript-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs\\'" . clojurescript-mode))
 
 (provide 'clojurescript-mode)
 ;;; clojurescript-mode.el ends here

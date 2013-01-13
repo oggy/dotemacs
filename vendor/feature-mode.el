@@ -187,7 +187,7 @@
                   (".*" nil nil (0 font-lock-type-face t)))
     (background . (0 font-lock-keyword-face))
     (scenario     (0 font-lock-keyword-face)
-                  (".*" nil nil (0 font-lock-function-name-face t)))
+                  (".*" nil nil (0 font-lock-function-name-face nil)))
     (scenario_outline
                   (0 font-lock-keyword-face)
                   (".*" nil nil (0 font-lock-function-name-face t)))
@@ -197,6 +197,7 @@
     (but        . font-lock-keyword-face)
     (and        . font-lock-keyword-face)
     (examples   . font-lock-keyword-face)
+    ("<.*>"     . font-lock-variable-name-face)
     ("^ *@.*"   . font-lock-preprocessor-face)
     ("^ *#.*"     0 font-lock-comment-face t)))
 
@@ -255,11 +256,11 @@
 
 (defcustom feature-indent-level 2
   "Indentation of feature statements"
-  :type 'integer :group 'feature)
+  :type 'integer :group 'feature-mode)
 
 (defcustom feature-indent-offset 2
   "*Amount of offset per level of indentation."
-  :type 'integer :group 'feature)
+  :type 'integer :group 'feature-mode)
 
 (defun feature-compute-indentation ()
   "Calculate the maximum sensible indentation for the current line."
@@ -425,7 +426,7 @@ are loaded on startup.  If nil, don't load snippets.")
 
     (global-set-key (kbd "C-c ,r") redoer-cmd)))
 
-(defun feature-run-cucumber (cuke-opts &optional &key feature-file)
+(defun* feature-run-cucumber (cuke-opts &key feature-file)
   "Runs cucumber with the specified options"
   (feature-register-verify-redo (list 'feature-run-cucumber
                                       (list 'quote cuke-opts)
