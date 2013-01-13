@@ -22,6 +22,7 @@
 
 ;;;; Initializers
 
+(require 'g-fixes)
 (require 'g-customizations)
 (require 'g-helpers)
 (require 'g-keymaps)
