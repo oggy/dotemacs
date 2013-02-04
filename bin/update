@@ -5,6 +5,11 @@ curl https://raw.github.com/technomancy/clojure-mode/master/clojure-mode.el > ve
 curl https://raw.github.com/technomancy/clojure-mode/master/clojure-test-mode.el > vendor/clojure-mode/clojure-test-mode.el
 curl https://raw.github.com/technomancy/clojure-mode/master/clojurescript-mode.el > vendor/clojure-mode/clojurescript-mode.el
 
+mkdir -p vendor/yasnippet
+curl https://raw.github.com/capitaomorte/yasnippet/master/yasnippet.el > vendor/yasnippet/yasnippet.el
+curl https://raw.github.com/capitaomorte/yasnippet/master/yasnippet-debug.el > vendor/yasnippet/yasnippet-debug.el
+curl https://raw.github.com/capitaomorte/yasnippet/master/dropdown-list.el > vendor/yasnippet/dropdown-list.el
+
 curl https://raw.github.com/defunkt/coffee-mode/master/coffee-mode.el > vendor/coffee-mode.el
 curl https://raw.github.com/michaelklishin/cucumber.el/master/feature-mode.el > vendor/feature-mode.el
 curl https://raw.github.com/nex3/haml-mode/master/haml-mode.el > vendor/haml-mode.el
