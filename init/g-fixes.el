@@ -1,6 +1,7 @@
 ;; Fix uncomment-region leaving comment padding.
 ;; http://lists.gnu.org/archive/html/bug-gnu-emacs/2011-03/msg00098.html
 ;; Still leaves trailing comment padding...
+(require 'newcomment)
 (defun uncomment-region-default (beg end &optional arg)
   "Uncomment each line in the BEG .. END region.
 The numeric prefix ARG can specify a number of chars to remove from the
