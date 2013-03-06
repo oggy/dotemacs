@@ -30,8 +30,9 @@
 (require 'css-mode nil t)
 (require 'textile-mode nil t)
 (require 'markdown-mode nil t)
-(require 'javascript-mode "javascript" t)
-(require 'js nil t)
+(or
+ (require 'js nil t)
+ (require 'javascript-mode "javascript" t))
 
 
 ;; User definable variables
@@ -281,6 +282,7 @@ For example, this will highlight all of the following:
           (case (char-after)
             ;; Highlight obj refs
             (?\[
+             (forward-char 1)
              (let ((beg (point)))
                (haml-limited-forward-sexp eol)
                (haml-fontify-region-as-ruby beg (point))))
@@ -466,6 +468,7 @@ changes in the initial region."
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?: "." table)
     (modify-syntax-entry ?_ "w" table)
+    (modify-syntax-entry ?' "\"" table)
     table)
   "Syntax table in use in `haml-mode' buffers.")
 
