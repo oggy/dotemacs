@@ -121,4 +121,20 @@ Does not affect the modifiedness for readonly buffers."
       (set-buffer-modified-p was-modified-p))
     (setq buffer-read-only was-read-only-p))))
 
+(defun g-insert-breakpoint ()
+  "Insert a breakpoint.
+
+Requires the major-mode symbol to have a `g-breakpoint-code'
+property."
+  (interactive)
+  (let ((code (get major-mode 'g-breakpoint-code)))
+    (if (null code)
+        (error (format "no breakpoint code defined for %s" major-mode))
+      (unless (string-match "^[ \\t\\r\\f]*$"
+                            (buffer-substring (point-at-bol) (point-at-eol)))
+        (end-of-line)
+        (insert ?\n))
+      (insert code)
+      (indent-for-tab-command))))
+
 (provide 'g-commands)

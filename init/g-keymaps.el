@@ -64,6 +64,7 @@
 ;;; Other
 (global-set-key (kbd "C-c =")   'smart-align)
 (global-set-key (kbd "C-c c")   'g-comment)
+(global-set-key (kbd "C-c d")   'g-insert-breakpoint)
 (global-set-key (kbd "C-c i")   'manual-entry)
 (global-set-key (kbd "C-c e")   'eval-current-buffer)
 (global-set-key (kbd "C-c q")   'g-insert-char-by-number)

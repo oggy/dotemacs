@@ -181,7 +181,8 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;;;; Python
 
 (g-when-starting-mode python
-  (modify-syntax-entry ?_ "_" py-mode-syntax-table))
+  (modify-syntax-entry ?_ "_" py-mode-syntax-table)
+  (put 'python-mode 'g-breakpoint-code "import nose; nose.tools.set_trace()"))
 
 ;;;; Ruby
 
@@ -197,7 +198,8 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (setq comment-start "#")
   (setq ruby-deep-arglist nil)           ; t?
   (setq ruby-deep-indent-paren '(?\( t))
-  (setq ruby-deep-indent-paren-style 'space))
+  (setq ruby-deep-indent-paren-style 'space)
+  (put 'ruby-mode 'g-breakpoint-code "require 'debugger'; debugger"))
 
 (g-define-mode-keys ruby
   "C-c C-l" 'g-ruby-load-buffer
