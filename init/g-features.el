@@ -1,3 +1,10 @@
+;; html-helper-mode kills indenting
+(setq magic-mode-alist
+      (delq nil
+            (mapcar (lambda (pair) (if (eq (cdr pair) 'html-helper-mode) nil pair))
+                    magic-mode-alist)))
+
+;; Ensure buffer switching available all the time.
 (g-pc-bufsw-mode)
 
 ;; Enable redo.
