@@ -61,7 +61,13 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-define-mode-keys coffee
   "RET"  'newline
   "\C-m" 'newline
+  "C-c l" 'g-coffee-insert-console-log
   "\C-c \C-c" 'g-coffee-visit-js)
+
+(defun g-coffee-insert-console-log ()
+  "Insert 'console.log '."
+  (interactive)
+  (insert "console.log "))
 
 (defun g-coffee-visit-js ()
   (interactive)
