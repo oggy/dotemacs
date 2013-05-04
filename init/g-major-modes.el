@@ -176,6 +176,13 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   "C-q"   (simple-command (kill-buffer (current-buffer)))
   "C-w"   (simple-command (kill-buffer (current-buffer)) (delete-window)))
 
+;;;; Octave
+
+(g-when-starting-mode octave
+  (setq octave-comment-char ?%)
+  (setq octave-comment-start "% ")
+  (modify-syntax-entry ?. "." octave-mode-syntax-table))
+
 ;;;; Perl
 
 (g-when-starting-mode cperl
