@@ -23,6 +23,7 @@ it."
 (put 'c++-mode 'g-block-end-delimiter "}")
 (put 'java-mode 'g-block-end-delimiter "}")
 (put 'javascript-mode 'g-block-end-delimiter "}")
+(put 'julia-mode 'g-block-end-delimiter "end")
 (put 'lua-mode 'g-block-end-delimiter "end")
 (put 'octave-mode 'g-block-end-delimiter "end;")
 (put 'ruby-mode 'g-block-end-delimiter "end")
