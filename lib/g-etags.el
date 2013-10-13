@@ -1,10 +1,11 @@
 (eval-and-compile (require 'em-glob))
 
 ;;;###autoload
-(defun g-etags-make-tags-file (glob out)
+(defun g-etags-make (glob out)
   "Output a tags file OUT for files matching GLOB.
 
-Uses variable `etags-bin'."
+Uses variable `g-etags-bin'."
+  (require 'etags)
   (interactive (let* ((file-name (buffer-file-name)))
                  (list
                   (let* ((dir-name (if file-name (file-name-directory file-name) nil))
@@ -17,12 +18,11 @@ Uses variable `etags-bin'."
                     (read-string "Output file: " initial)))))
   (setq out (expand-file-name out))
   (if (file-exists-p out) (delete-file out))
-  (let* ((paths (eshell-extended-glob glob))
-         (progress-reporter (make-progress-reporter "Etagging files..."
-                                                    0 (length paths))))
-    (while paths
-      (call-process etags-bin nil nil nil "-a" (car paths) "-o" out)
-      (setq paths (cdr paths)))
-    (progress-reporter-done progress-reporter)))
+  (let* ((paths (eshell-extended-glob glob)))
+    (apply 'call-process g-etags-bin nil nil nil
+           (nconc '("-e") paths (list "-o" out)))))
+
+(defvar g-etags-bin "ctags"
+  "Path to etags executable.")
 
 (provide 'g-etags)
