@@ -93,6 +93,11 @@
   :type 'boolean
   :group 'feature-mode)
 
+(defcustom feature-root-marker-file-name "features"
+  "file to look for to find the project root."
+  :group 'feature-mode
+  :type  'string)
+
 ;;
 ;; Keywords and font locking
 ;;
@@ -454,10 +459,11 @@ are loaded on startup.  If nil, don't load snippets.")
   (equal a-directory (file-name-directory (directory-file-name a-directory))))
 
 (defun feature-project-root (&optional directory)
-  "Finds the root directory of the project by walking the directory tree until it finds Rakefile (presumably, application root)"
+  "Finds the root directory of the project by walking the directory tree until it finds the file set by `feature-root-marker-file-name' (presumably, application root)"
   (let ((directory (file-name-as-directory (or directory default-directory))))
-    (if (feature-root-directory-p directory) (error "No rakefle found"))
-    (if (file-exists-p (concat directory "Rakefile"))
+    (if (feature-root-directory-p directory)
+        (error (concat "Could not find " feature-root-marker-file-name)))
+    (if (file-exists-p (concat directory feature-root-marker-file-name))
         directory
       (feature-project-root (file-name-directory (directory-file-name directory))))))
 
@@ -467,9 +473,11 @@ are loaded on startup.  If nil, don't load snippets.")
   (let* ((root (feature-project-root))
          (input (thing-at-point 'line))
          (_ (set-text-properties 0 (length input) nil input))
-         (result (shell-command-to-string (format "cd %S && ruby %S/find_step.rb %S"
+         (result (shell-command-to-string (format "cd %S && ruby %S/find_step.rb %s %s %S"
                                                   root
                                                   feature-support-directory
+                                                  (feature-detect-language)
+                                                  feature-default-i18n-file
                                                   input)))
          (file-and-line (car (split-string result "\n")))
          (matched? (string-match "^\\(.+\\):\\([0-9]+\\)$" file-and-line)))
