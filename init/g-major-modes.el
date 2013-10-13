@@ -90,6 +90,17 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (defun g-comint-clear-query-on-exit ()
   (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
 
+;;;; Diff
+
+(defun g-diff-apply-and-kill-hunk ()
+  "Apply the current hunk and remove it from the buffer."
+  (interactive)
+  (save-excursion (diff-apply-hunk))
+  (diff-hunk-kill))
+
+(g-define-mode-keys diff
+  "C-c C-k" 'g-diff-apply-and-kill-hunk)
+
 ;;;; Java
 
 (g-when-starting-mode java
