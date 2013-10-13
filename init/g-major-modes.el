@@ -80,6 +80,7 @@ the form accepted by `kbd'.  DEF is of the form accepted by
           (call-process "coffee" nil nil nil "-c" (buffer-file-name))
           (setq js-path (replace-match ".js" t t coffee-path))
           (switch-to-buffer (find-file-noselect js-path t))
+          (setq buffer-read-only t)
           (find-file js-path))
       (error "Cannot deduce javascript name because this file does not end in '.coffee'"))))
 
