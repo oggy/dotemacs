@@ -30,6 +30,7 @@
 (require 'g-autoloads)
 (require 'g-major-modes)
 (require 'g-dired)
+(require 'g-files)
 (require 'g-region)
 (require 'g-minibuffer)
 (require 'g-windows)
