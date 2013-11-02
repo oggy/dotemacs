@@ -102,11 +102,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-define-mode-keys diff
   "C-c C-k" 'g-diff-apply-and-kill-hunk)
 
-;;;; Java
-
-(g-when-starting-mode java
-  (c-set-style "gnu"))
-
 ;; Feature (Cucumber)
 
 (defun g-feature-default-feature-name ()
@@ -130,6 +125,16 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-when-starting-mode feature
   (if (zerop (buffer-size))
     (g-feature-insert-skeleton)))
+
+;;;; Groovy
+
+(g-when-starting-mode groovy
+  (c-set-style "java"))
+
+;;;; Java
+
+(g-when-starting-mode java
+  (c-set-style "java"))
 
 ;; JS
 
