@@ -67,6 +67,10 @@
 ;; Detect Rails projects.
 (rails-mode 1)
 
+;; Meaningful buffer names when basenames aren't unique.
+(when (require 'uniquify nil t)
+  (setq uniquify-buffer-name-style 'forward))
+
 ;; No thanks.
 (when (functionp 'global-smart-spacing-mode)
   (global-smart-spacing-mode 0))
