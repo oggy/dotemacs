@@ -6,7 +6,7 @@
       (let ((file-dir (file-name-directory file-path)))
         (unless (file-exists-p file-dir)
           (when (yes-or-no-p "Directory does not exist - create? ")
-            (make-directory file-dir)))))))
+            (make-directory file-dir t)))))))
 
 (add-hook 'find-file-hook 'g-find-file-make-directory-prompt t)
 
