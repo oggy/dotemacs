@@ -22,4 +22,5 @@ curl https://raw.github.com/yoshiki/yaml-mode/master/yaml-mode.el > vendor/yaml-
 curl https://raw.github.com/motus/pig-mode/master/pig-mode.el > vendor/pig-mode.el
 curl https://raw.github.com/JuliaLang/julia/master/contrib/julia-mode.el > vendor/julia-mode.el
 curl https://raw.github.com/russel/Emacs-Groovy-Mode/master/groovy-mode.el > vendor/groovy-mode.el
+curl https://raw.github.com/mooz/js2-mode/master/js2-mode.el > vendor/js2-mode.el
 curl http://ctan.mackichan.com/graphics/asymptote/base/asy-mode.el > vendor/asy-mode.el
