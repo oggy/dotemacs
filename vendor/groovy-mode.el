@@ -2,7 +2,7 @@
 
 ;;  Author: Russel Winder <russel@winder.org.uk>
 ;;  Created: 2006-08-01
-;;  Version: 201305050920
+;;  Version: 201311291207
 
 ;;;; NB Version number is date and time yyyymmddhhMM in GMT (aka UTC).
 
@@ -404,7 +404,7 @@ need for `java-font-lock-extra-types'.")
 
 ;;; Autoload mode trigger
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.groovy$" . groovy-mode))
+(add-to-list 'auto-mode-alist '("\\.groovy\\'" . groovy-mode))
 
 ;; Custom variables
 ;;;###autoload

@@ -224,7 +224,7 @@ END.")
           (code-start (1+ (match-beginning 3)))
           (code-end (match-end 3)))
       (save-match-data
-        (funcall (or (aget haml-fontify-filter-functions-alist filter-name)
+        (funcall (or (cdr (assoc filter-name haml-fontify-filter-functions-alist))
                      #'(lambda (beg end)
                          (put-text-property beg end
                                             'face
@@ -272,9 +272,9 @@ For example, this will highlight all of the following:
     (while (haml-move "\\([.#%]\\)[a-z0-9_:\\-]*")
       (put-text-property (match-beginning 0) (match-end 0) 'face
                          (case (char-after (match-beginning 1))
-                           (?% font-lock-function-name-face)
-                           (?# font-lock-keyword-face)
-                           (?. font-lock-type-face))))
+                           (?% font-lock-keyword-face)
+                           (?# font-lock-function-name-face)
+                           (?. font-lock-variable-name-face))))
 
     (block loop
       (while t
@@ -723,7 +723,7 @@ and BEG and END delimit that text in the buffer."
       (haml-move "[ \t]*")
       (when (haml-move "=")
         (haml-move "[ \t]*")
-        (unless (looking-at "[\"'@a-z]") (return-from haml-parse-new-attr-hash))
+        (unless (looking-at "[\"'@a-z0-9]") (return-from haml-parse-new-attr-hash))
         (let ((beg (point)))
           (haml-limited-forward-sexp eol)
           (funcall fn 'value beg (point)))

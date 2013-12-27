@@ -341,7 +341,7 @@ Please, don't. https://github.com/styleguide/templates/2.0
       });
 
       $(document).on('keydown', function(event) {
-        if (event.target === document.body && event.keyCode === 192) {
+        if (event.target === document.body && event.keyCode === 192 && !event.metaKey) {
           $('#parallax_wrapper').css('-webkit-filter','grayscale(25%)')
           document.cookie = 'stats=yes; path=/';
           setTimeout(function() {
