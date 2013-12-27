@@ -15,8 +15,11 @@ curl https://raw.github.com/michaelklishin/cucumber.el/master/feature-mode.el > 
 curl https://raw.github.com/nex3/haml-mode/master/haml-mode.el > vendor/haml-mode.el
 curl https://raw.github.com/superbobry/io-mode/master/io-mode.el > vendor/io-mode.el
 curl https://raw.github.com/immerrr/lua-mode/master/lua-mode.el > vendor/lua-mode.el
+curl https://raw.github.com/mbunkus/mo-git-blame/master/mo-git-blame.el > vendor/mo-git-blame.el
 curl https://raw.github.com/senny/rvm.el/master/rvm.el > vendor/rvm.el
 curl https://raw.github.com/nex3/sass-mode/master/sass-mode.el > vendor/sass-mode.el
 curl https://raw.github.com/yoshiki/yaml-mode/master/yaml-mode.el > vendor/yaml-mode.el
+curl https://raw.github.com/motus/pig-mode/master/pig-mode.el > vendor/pig-mode.el
 curl https://raw.github.com/JuliaLang/julia/master/contrib/julia-mode.el > vendor/julia-mode.el
 curl https://raw.github.com/russel/Emacs-Groovy-Mode/master/groovy-mode.el > vendor/groovy-mode.el
+curl http://ctan.mackichan.com/graphics/asymptote/base/asy-mode.el > vendor/asy-mode.el
