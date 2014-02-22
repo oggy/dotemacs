@@ -116,6 +116,12 @@ interactive use, e.g. the file name, current revision etc.")
   :group 'mo-git-blame
   :type 'string)
 
+(defcustom mo-git-blame-git-blame-args ""
+  "Additional arguments to pass to git blame."
+  :group 'mo-git-blame
+  :type 'string)
+
+
 (defcustom mo-git-blame-incremental t
   "Runs `git blame' in the background with the --incremental
 option if this variable is non-nil."
@@ -509,6 +515,11 @@ from elisp.
         truncate-lines t)
   (use-local-map mo-git-blame-mode-map))
 
+(defun mo-git-blame--make-args (args)
+  (delete ""
+          (append (list mo-git-blame-git-blame-args)
+                  args)))
+
 (defun mo-git-blame-run-blame-normally (start-line lines-to-blame)
   (let* ((num-content-lines (mo-git-blame-number-of-content-lines))
          (num-lines-to-append (if (and start-line
@@ -524,7 +535,7 @@ from elisp.
     (if start-line
         (setq args (append (list "-L" (format "%d,+%d" start-line lines-to-blame))
                            args)))
-    (apply 'mo-git-blame-run "blame" args)
+    (apply 'mo-git-blame-run "blame" (mo-git-blame--make-args args))
 
     (if num-lines-to-append
         (dotimes (i num-lines-to-append)
@@ -541,7 +552,7 @@ from elisp.
         (setq args (append (list "-L" (format "%d,+%d" start-line lines-to-blame))
                            args)))
     (mo-git-blame-assert-not-running)
-    (apply 'mo-git-blame-run* "blame" args)))
+    (apply 'mo-git-blame-run* "blame" (mo-git-blame--make-args args))))
 
 (defun mo-git-blame-init-blame-buffer (start-line lines-to-blame)
   (if mo-git-blame-incremental
@@ -754,7 +765,7 @@ blamed."
   (interactive)
   (if (null (buffer-file-name))
       (error "The current buffer is not associated with a file."))
-  (mo-git-blame-file (buffer-file-name)))
+  (mo-git-blame-file (file-truename (buffer-file-name))))
 
 ;;;###autoload
 (defun mo-git-blame-current-for-revision (revision)
@@ -762,7 +773,7 @@ blamed."
   (interactive "sRevision: ")
   (if (null (buffer-file-name))
       (error "The current buffer is not associated with a file."))
-  (mo-git-blame-file (buffer-file-name) revision))
+  (mo-git-blame-file (file-truename (buffer-file-name)) revision))
 
 (provide 'mo-git-blame)
 

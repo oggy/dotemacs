@@ -130,6 +130,8 @@
 ;;; Code:
 
 (require 'cl)
+(eval-and-compile
+  (require 'cl-lib))
 (require 'easymenu)
 (require 'help-mode)
 
@@ -1929,9 +1931,13 @@ loading."
       ;;
       (yas-direct-keymaps-reload)
 
+      (run-hooks 'yas-after-reload-hook)
       (yas--message 3 "Reloaded everything%s...%s."
                    (if interactive "" " (snippets will load just-in-time)")
                    (if errors " (some errors, check *Messages*)" "")))))
+
+(defvar yas-after-reload-hook nil
+  "Hooks run after `yas-reload-all'.")
 
 (defun yas--load-pending-jits ()
   (dolist (mode (yas--modes-to-activate))

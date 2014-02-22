@@ -138,6 +138,8 @@
 (eval-when-compile
   (require 'cl))
 
+(declare-function electric-pair-backward-delete-char-untabify "elec-pair")
+
 ;;
 ;; Customizable Variables
 ;;
@@ -209,19 +211,6 @@ with CoffeeScript."
 (defcustom coffee-mode-hook nil
   "Hook called by `coffee-mode'.  Examples:
 
-      ;; CoffeeScript uses two spaces.
-      (make-local-variable 'tab-width)
-      (set 'tab-width 2)
-
-      ;; If you don't want your compiled files to be wrapped
-      (setq coffee-args-compile '(\"-c\" \"--bare\"))
-
-      ;; Emacs key binding
-      (define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer)
-
-      ;; Bleeding edge.
-      (setq coffee-command \"~/dev/coffee\")
-
       ;; Compile '.coffee' files on every save
       (and (file-exists-p (buffer-file-name))
            (file-exists-p (coffee-compiled-file-name))
@@ -229,12 +218,19 @@ with CoffeeScript."
   :type 'hook
   :group 'coffee)
 
+(defcustom coffee-indent-tabs-mode nil
+  "Indentation can insert tabs if this is t."
+  :group 'coffee
+  :type 'boolean)
+
 (defvar coffee-mode-map
   (let ((map (make-sparse-keymap)))
     ;; key bindings
     (define-key map (kbd "A-r") 'coffee-compile-buffer)
+    (define-key map (kbd "C-c C-k") 'coffee-compile-buffer)
     (define-key map (kbd "A-R") 'coffee-compile-region)
     (define-key map (kbd "A-M-r") 'coffee-repl)
+    (define-key map (kbd "C-c C-z") 'coffee-repl)
     (define-key map [remap comment-dwim] 'coffee-comment-dwim)
     (define-key map [remap newline-and-indent] 'coffee-newline-and-indent)
     (define-key map "\C-m" 'coffee-newline-and-indent)
@@ -305,14 +301,13 @@ See `coffee-compile-jump-to-error'."
   (interactive)
   (let* ((input (buffer-file-name))
          (basename (file-name-sans-extension input))
-         (output (if (string-match-p "\\.js\\'" basename)
-                     basename
-                   (concat basename ".js")))
+         (output (when (string-match-p "\\.js\\'" basename) ;; for Rails '.js.coffee' file
+                   basename))
          (compile-cmd (coffee-command-compile input output))
          (compiler-output (shell-command-to-string compile-cmd)))
     (if (string= compiler-output "")
         (let ((file-name (coffee-compiled-file-name (buffer-file-name))))
-          (message "Compiled and saved %s" output)
+          (message "Compiled and saved %s" (or output (concat basename ".js")))
           (coffee-revert-buffer-compiled-file file-name))
       (let* ((msg (car (split-string compiler-output "[\n\r]+")))
              (line (when (string-match "on line \\([0-9]+\\)" msg)
@@ -326,8 +321,7 @@ See `coffee-compile-jump-to-error'."
   "Compiles the current buffer and displays the JavaScript in a buffer
 called `coffee-compiled-buffer-name'."
   (interactive)
-  (save-excursion
-    (coffee-compile-region (point-min) (point-max))))
+  (coffee-compile-region (point-min) (point-max)))
 
 (defun coffee-compile-region (start end)
   "Compiles a region and displays the JavaScript in a buffer called
@@ -337,6 +331,7 @@ called `coffee-compiled-buffer-name'."
   (let ((buffer (get-buffer coffee-compiled-buffer-name)))
     (when buffer
       (with-current-buffer buffer
+        (setq buffer-read-only nil)
         (erase-buffer))))
 
   (apply (apply-partially 'call-process-region start end coffee-command nil
@@ -345,10 +340,13 @@ called `coffee-compiled-buffer-name'."
          (append coffee-args-compile (list "-s" "-p")))
 
   (let ((buffer (get-buffer coffee-compiled-buffer-name)))
-    (display-buffer buffer)
-    (with-current-buffer buffer
-      (let ((buffer-file-name "tmp.js"))
-        (set-auto-mode)))))
+    (save-selected-window
+      (pop-to-buffer buffer)
+      (with-current-buffer buffer
+        (let ((buffer-file-name "tmp.js"))
+          (setq buffer-read-only t)
+          (set-auto-mode)
+          (goto-char (point-min)))))))
 
 (defun coffee-get-repl-proc ()
   (unless (comint-check-proc coffee-repl-buffer)
@@ -425,22 +423,23 @@ called `coffee-compiled-buffer-name'."
 (defvar coffee-assign-regexp "\\(@?[[:word:].$]+?\\)\\s-*:")
 
 ;; Local Assignment
-(defvar coffee-local-assign-regexp "\\s-*\\([[:word:].$]+\\)\\s-*=\\(?:[^>]\\|$\\)")
+(defvar coffee-local-assign-regexp "\\s-*\\([[:word:].$]+\\)\\s-*=\\(?:[^>=]\\|$\\)")
 
 ;; Lambda
-(defvar coffee-lambda-regexp "\\(?:(.+)\\)?\\s-*\\(->\\|=>\\)")
+(defvar coffee-lambda-regexp "\\(?:(.*)\\)?\\s-*\\(->\\|=>\\)")
 
 ;; Namespaces
 (defvar coffee-namespace-regexp "\\b\\(?:class\\s-+\\(\\S-+\\)\\)\\b")
 
 ;; Booleans
 (defvar coffee-boolean-regexp
-  (regexp-opt '("true" "false" "yes" "no" "on" "off" "null" "undefined")
-              'words))
+  (concat "\\(?:^\\|[^.]\\)"
+          (regexp-opt '("true" "false" "yes" "no" "on" "off" "null" "undefined")
+                      'words)))
 
 ;; Regular expressions
 (eval-and-compile
-  (defvar coffee-regexp-regexp "\\s$\\(\\(?:\\\\/\\|[^/\n\r]\\)*\\)\\s$"))
+  (defvar coffee-regexp-regexp "\\s/\\(\\(?:\\\\/\\|[^/\n\r]\\)*\\)\\s/"))
 
 ;; String Interpolation(This regexp is taken from ruby-mode)
 (defvar coffee-string-interpolation-regexp "#{[^}\n\\\\]*\\(?:\\\\.[^}\n\\\\]*\\)*}")
@@ -470,10 +469,11 @@ called `coffee-compiled-buffer-name'."
 ;; Regular expression combining the above three lists.
 (defvar coffee-keywords-regexp
   ;; keywords can be member names.
-  (regexp-opt (append coffee-js-reserved
-                      coffee-js-keywords
-                      coffee-cs-keywords
-                      iced-coffee-cs-keywords) 'symbols))
+  (concat "\\(?:^\\|[^.]\\)"
+          (regexp-opt (append coffee-js-reserved
+                              coffee-js-keywords
+                              coffee-cs-keywords
+                              iced-coffee-cs-keywords) 'symbols)))
 
 ;; Create the list for font-lock. Each class of keyword is given a
 ;; particular face.
@@ -540,7 +540,7 @@ output in a compilation buffer."
   (concat "^\\(\\s-*\\)" ; $1
           "\\(?:"
           coffee-assign-regexp ; $2
-          "\\s-+"
+          "\\s-*"
           coffee-lambda-regexp
           "\\|"
           coffee-namespace-regexp ; $4
@@ -593,7 +593,9 @@ output in a compilation buffer."
 ;;
 
 (defsubst coffee-insert-spaces (count)
-  (insert-char ?  count))
+  (if coffee-indent-tabs-mode
+      (insert-char (string-to-char "\t")  (floor count coffee-tab-width))
+    (insert-char ?  count)))
 
 ;;; The theory is explained in the README.
 
@@ -662,19 +664,24 @@ Delete ARG spaces if ARG!=1."
                         (back-to-indentation)
                         (point)))
            (not (bolp)))
-      (let ((extra-space-count (% (current-column) coffee-tab-width)))
-        (backward-delete-char-untabify
-         (if (zerop extra-space-count)
-             coffee-tab-width
-           extra-space-count)))
-    (backward-delete-char-untabify arg)))
+      (let* ((extra-space-count (% (current-column) coffee-tab-width))
+             (deleted-chars (if (zerop extra-space-count)
+                                coffee-tab-width
+                              extra-space-count)))
+        (if electric-pair-mode
+            (electric-pair-backward-delete-char-untabify deleted-chars)
+          (backward-delete-char-untabify deleted-chars)))
+    (if electric-pair-mode
+        (electric-pair-backward-delete-char-untabify arg)
+      (backward-delete-char-untabify arg))))
 
 ;; Indenters help determine whether the current line should be
 ;; indented further based on the content of the previous line. If a
 ;; line starts with `class', for instance, you're probably going to
 ;; want to indent the next line.
 
-(defvar coffee-indenters-bol '("class" "for" "if" "try" "while")
+(defvar coffee-indenters-bol '("class" "for" "if" "else" "while" "until"
+                               "try" "catch" "finally" "switch")
   "Keywords or syntax whose presence at the start of a line means the
 next line should probably be indented.")
 
@@ -797,7 +804,7 @@ comments such as the following:
 (defconst coffee-defun-regexp
   (concat "^\\s-*\\(?:"
           coffee-assign-regexp
-          "\\s-+"
+          "\\s-*"
           coffee-lambda-regexp
           "\\|"
           coffee-namespace-regexp
@@ -986,6 +993,23 @@ comments such as the following:
            (put-text-property (1- quote-ending-pos) quote-ending-pos
                               'syntax-table (string-to-syntax "|"))))))
 
+(defun coffee-syntax-propertize-block-comment ()
+  (let ((curpoint (point))
+        (inhibit-changing-match-data t))
+    (let* ((valid-comment-start nil)
+           (valid-comment-end (looking-at-p "#\\{0,2\\}\\s-*$"))
+           (ppss (prog2
+                     (backward-char 3)
+                     (syntax-ppss)
+                   (setq valid-comment-start (looking-back "^\\s-*"))
+                   (forward-char 3)))
+           (in-comment (nth 4 ppss))
+           (in-string (nth 3 ppss)))
+      (when (or (and (not in-comment) (not in-string) valid-comment-start)
+                (and in-comment valid-comment-end))
+        (put-text-property (- curpoint 3) curpoint
+                           'syntax-table (string-to-syntax "!"))))))
+
 (defun coffee-syntax-propertize-function (start end)
   (goto-char start)
   (funcall
@@ -1001,13 +1025,8 @@ comments such as the following:
              (put-text-property (match-beginning 1) (match-end 1)
                                 'syntax-table (string-to-syntax "_")))))))
     (coffee-regexp-regexp (1 (string-to-syntax "_")))
-    ("^[[:space:]]*\\(###\\)\\([[:space:]]+.*\\)?$"
-     (1 (ignore
-         (let ((after-triple-hash (match-string-no-properties 2)))
-           (when (or (not after-triple-hash)
-                     (not (string-match-p "###\\'" after-triple-hash)))
-             (put-text-property (match-beginning 1) (match-end 1)
-                                'syntax-table (string-to-syntax "!"))))))))
+    ("###"
+     (0 (ignore (coffee-syntax-propertize-block-comment)))))
    (point) end))
 
 ;;
@@ -1029,7 +1048,7 @@ comments such as the following:
   (modify-syntax-entry ?\n "> b" coffee-mode-syntax-table)
 
   ;; Treat slashes as paired delimiters; useful for finding regexps.
-  (modify-syntax-entry ?/ "$" coffee-mode-syntax-table)
+  (modify-syntax-entry ?/ "/" coffee-mode-syntax-table)
 
   (set (make-local-variable 'comment-start) "#")
 
@@ -1038,6 +1057,7 @@ comments such as the following:
 
   ;; indentation
   (make-local-variable 'coffee-tab-width)
+  (make-local-variable 'coffee-indent-tabs-mode)
   (set (make-local-variable 'indent-line-function) 'coffee-indent-line)
   (set (make-local-variable 'tab-width) coffee-tab-width)
 
@@ -1062,7 +1082,7 @@ comments such as the following:
        (list (lambda (arg) 'no-indent)))
 
   ;; no tabs
-  (setq indent-tabs-mode nil))
+  (setq indent-tabs-mode coffee-indent-tabs-mode))
 
 ;;
 ;; Compile-on-Save minor mode

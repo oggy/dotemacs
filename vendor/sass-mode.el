@@ -48,6 +48,7 @@
   '("^.*,$" ;; Continued selectors
     "^ *@\\(extend\\|debug\\|warn\\|include\\|import\\)" ;; Single-line mixins
     "^ *[$!]" ;; Variables
+    "^ *[[:alnum:]\\-]+ *:" ;; Plain attribute values
     )
   "A list of regexps that match lines of Sass that couldn't have
 text nested beneath them.")
@@ -181,9 +182,17 @@ LIMIT is the limit of the search."
 
 ;; Mode setup
 
+(defvar sass-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-c\C-r" 'sass-output-region)
+    (define-key map "\C-c\C-l" 'sass-output-buffer)
+    map))
+
 ;;;###autoload
 (define-derived-mode sass-mode haml-mode "Sass"
-  "Major mode for editing Sass files."
+  "Major mode for editing Sass files.
+
+\\{sass-mode-map}"
   (set-syntax-table sass-syntax-table)
   (setq font-lock-extend-region-functions
         '(font-lock-extend-region-wholelines font-lock-extend-region-multiline))
@@ -201,8 +210,26 @@ LIMIT is the limit of the search."
         if (looking-at opener) return nil
         finally return t))
 
+;; Command
+
+(defun sass-output-region (start end)
+  "Displays the CSS output for the current block of Sass code.
+Called from a program, START and END specify the region to indent."
+  (interactive "r")
+  (let ((output-buffer "*sass-output*"))
+    (shell-command-on-region start end "sass --stdin" output-buffer)
+    (when (fboundp 'css-mode)
+      (with-current-buffer output-buffer
+        (css-mode)))
+    (switch-to-buffer-other-window output-buffer)))
+
+(defun sass-output-buffer ()
+  "Displays the CSS output for entire buffer."
+  (interactive)
+  (sass-output-region (point-min) (point-max)))
+
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.sass$" . sass-mode))
+(add-to-list 'auto-mode-alist '("\\.sass\\'" . sass-mode))
 
 ;; Setup/Activation
 (provide 'sass-mode)
