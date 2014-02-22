@@ -164,9 +164,7 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;; HTML
 
 (g-define-mode-keys html
-  "TAB" 'g-indent-for-tab-command)
-
-(put 'html-mode 'g-tab-command 'sgml-indent-or-tab)
+  "M-RET" 'g-html-close-tag)
 
 ;;;; CSS
 
