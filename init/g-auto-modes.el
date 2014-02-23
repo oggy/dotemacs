@@ -17,6 +17,7 @@ any file with that extension should be loaded with MODE."
           (add-to-list 'interpreter-mode-alist (cons regexp mode)))
         regexps))
 
+(auto-mode 'c-mode 'cu)
 (auto-mode 'c++-mode 'ut)
 (auto-mode 'css-mode 'scss)
 (auto-mode 'coffee-mode 'coffee '_coffee "Cakefile")
