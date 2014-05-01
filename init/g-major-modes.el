@@ -210,7 +210,7 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;;;; Python
 
 (g-when-starting-mode python
-  (modify-syntax-entry ?_ "_" py-mode-syntax-table)
+  (modify-syntax-entry ?_ "_" python-mode-syntax-table)
   (put 'python-mode 'g-breakpoint-code "import nose; nose.tools.set_trace()")
   (setq py-smart-indentation nil)
   (setq py-indent-offset 4)
