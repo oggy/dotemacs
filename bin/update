@@ -22,3 +22,4 @@ curl https://raw.github.com/JuliaLang/julia/master/contrib/julia-mode.el > vendo
 curl https://raw.github.com/russel/Emacs-Groovy-Mode/master/groovy-mode.el > vendor/groovy-mode.el
 curl https://raw.github.com/mooz/js2-mode/master/js2-mode.el > vendor/js2-mode.el
 curl http://ctan.mackichan.com/graphics/asymptote/base/asy-mode.el > vendor/asy-mode.el
+curl https://raw.githubusercontent.com/mozilla/rust/master/src/etc/emacs/rust-mode.el > vendor/rust-mode.el
