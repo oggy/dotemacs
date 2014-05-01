@@ -216,6 +216,30 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (setq py-indent-offset 4)
 )
 
+(g-define-mode-keys python
+  "C-c t" 'g-py-pick-nose)
+
+(defun g-py-current-def-name ()
+  "Return the name of the def at point."
+  (save-excursion
+    (py-beginning-of-def)
+    (search-forward-regexp "\\s-*def\s-*")
+    (thing-at-point 'symbol)))
+
+(defun g-py-current-class-name ()
+  "Return the name of the def at point."
+  (save-excursion
+    (py-beginning-of-class)
+    (search-forward-regexp "\\s-*class\s-*")
+    (thing-at-point 'symbol)))
+
+(defun g-py-pick-nose ()
+  "Write a nose command to the clipboard that runs just the current test."
+  (interactive)
+  (let ((test-name (concat (buffer-file-name) ":" (g-py-current-class-name) "." (g-py-current-def-name))))
+    (shell-command (concat "echo nosetests " test-name " | tr -d '\n' | pbcopy"))
+    (message (concat "Picked: " test-name))))
+
 ;;;; Ruby
 
 (require 'inf-ruby)
