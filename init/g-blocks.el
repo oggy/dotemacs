@@ -26,6 +26,7 @@ it."
 (put 'julia-mode 'g-block-end-delimiter "end")
 (put 'lua-mode 'g-block-end-delimiter "end")
 (put 'octave-mode 'g-block-end-delimiter "end;")
+(put 'rust-mode 'g-block-end-delimiter "}")
 (put 'ruby-mode 'g-block-end-delimiter "end")
 (put 'scala-mode 'g-block-end-delimiter "}")
 
