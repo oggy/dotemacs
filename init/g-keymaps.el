@@ -17,7 +17,6 @@
 (global-set-key (kbd "M-\\")    'g-delete-horizontal-space)
 (global-set-key (kbd "M-n")     'vertical-next-line)
 (global-set-key (kbd "M-p")     'vertical-previous-line)
-(global-set-key (kbd "TAB")     'g-indent-for-tab-command)
 (global-set-key (kbd "M-RET")   'g-end-block)
 
 ;; Prefer Aquamacs undo/redo, fallback to vendor/redo.el.

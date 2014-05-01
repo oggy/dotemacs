@@ -45,11 +45,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 
 ;;;; C++
 
-(g-define-mode-keys c++
-  "TAB"      'g-indent-for-tab-command)
-
-(put 'c++-mode 'g-tab-command 'c-indent-command)
-
 ;; must come after activating font-lock-mode in the hook
 (add-hook 'c++-mode-hook 'g-cc-init-buffer t)
 
@@ -199,14 +194,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (setq octave-comment-start "% ")
   (modify-syntax-entry ?. "." octave-mode-syntax-table))
 
-;;;; Perl
-
-(g-when-starting-mode cperl
-  (put 'cperl-mode 'g-tab-command 'cperl-indent-command))
-
-(g-define-mode-keys cperl
-  "TAB" 'g-indent-for-tab-command)
-
 ;;;; Python
 
 (g-when-starting-mode python
@@ -249,8 +236,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (setq ruby-mode-hook nil)
 
 (g-when-starting-mode ruby
-  ;(put 'ruby-mode 'g-tab-command 'ruby-indent-command)
-  (put 'ruby-mode 'g-tab-command 'ruby-indent-line)
   (setq comment-start "#")
   (setq ruby-deep-arglist nil)           ; t?
   (setq ruby-deep-indent-paren '(?\( t))
@@ -260,7 +245,7 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-define-mode-keys ruby
   "C-c C-l" 'g-ruby-load-buffer
   "C-c s"   'g-ruby-insert-heading
-  "TAB"     'g-indent-for-tab-command)
+)
 
 ;;;; Scala
 
