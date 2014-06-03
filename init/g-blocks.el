@@ -18,9 +18,10 @@ it."
       (indent-for-tab-command))))
 
 (put 'c-mode 'g-block-end-delimiter "}")
+(put 'c++-mode 'g-block-end-delimiter "}")
 (put 'css-mode 'g-block-end-delimiter "}")
 (put 'd-mode 'g-block-end-delimiter "}")
-(put 'c++-mode 'g-block-end-delimiter "}")
+(put 'elixir-mode 'g-block-end-delimiter "end")
 (put 'java-mode 'g-block-end-delimiter "}")
 (put 'javascript-mode 'g-block-end-delimiter "}")
 (put 'julia-mode 'g-block-end-delimiter "end")
