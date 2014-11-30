@@ -14,6 +14,9 @@
 ;; Enable redo.
 (require 'redo)
 
+;; Enable active-mark-mode
+(require 'active-mark-mode)
+
 ;; Use find-file-at-point.
 (require 'ffap)
 (ffap-bindings)
