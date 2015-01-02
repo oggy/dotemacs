@@ -24,7 +24,7 @@ any file with that extension should be loaded with MODE."
 (auto-mode 'octave-mode 'm)
 ;(auto-mode 'objc-mode 'm)
 (auto-mode 'd-mode 'd 'di)
-(auto-mode 'ruby-mode 'rb 'rjs 'rake 'rsel 'god 'to_json "[Rr]akefile$" "Capfile" "Gemfile" "Guardfile" ".autotest")
+(auto-mode 'ruby-mode 'rb 'rjs 'rake 'rsel 'god 'to_json "[Rr]akefile$" "Capfile" "Cheffile" "Gemfile" "Guardfile" ".autotest")
 (auto-mode 'feature-mode 'feature)
 (auto-mode 'html-mode 'html.erb)
 (auto-mode 'js-mode 'js 'json '_js 'htc "Jakefile")
