@@ -1,4 +1,4 @@
-(when aquamacsp
+(when (boundp 'osx-key-mode-map)
   ;; Remove osx-key bindings that I keep hitting by accident.
   (define-key osx-key-mode-map (kbd "A-q") nil)
   (define-key osx-key-mode-map (kbd "A-w") nil)
