@@ -79,10 +79,14 @@ class App
   end
 
   def generate_autoloads
+    autoloads = {}
     snippets = @sources.map do |src|
-      dst = src.sub(ROOT, "#{ROOT}/var/autoloads")
-      #dst = "#{ROOT}/var/autoloads/#{src}"
+      # If we write the autoload file for a /lib file to to /var, it'll write
+      # the relative path as the file to load. Avoid this by generating to the
+      # same directory, and then moving the file.
+      dst = "#{src.sub(/\.el\z/, '')}.autoloads.el"
       next if !stale?(dst, src)
+      autoloads[src] = dst
 
       <<-EOS
         (with-current-buffer (autoload-find-file "#{src}")
@@ -99,6 +103,13 @@ class App
         #{snippets})
     EOS
     system EMACS, '-batch', '-q', '-eval', lisp.gsub(/\s+/m, ' ').strip
+
+    autoloads.each do |src, autoloads|
+      next if !File.exist?(autoloads)
+      target = src.sub(ROOT, "#{ROOT}/var/autoloads")
+      FileUtils.mkdir_p File.dirname(target)
+      FileUtils.mv autoloads, target
+    end
   end
 
   def stale?(dst, src)
