@@ -24,6 +24,7 @@ it."
 (put 'elixir-mode 'g-block-end-delimiter "end")
 (put 'java-mode 'g-block-end-delimiter "}")
 (put 'javascript-mode 'g-block-end-delimiter "}")
+(put 'js-mode 'g-block-end-delimiter "}")
 (put 'julia-mode 'g-block-end-delimiter "end")
 (put 'lua-mode 'g-block-end-delimiter "end")
 (put 'octave-mode 'g-block-end-delimiter "end;")
