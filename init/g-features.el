@@ -87,6 +87,10 @@
 (unless (server-running-p)
   (server-start))
 
+;; Turn off electric indent.
+(when (functionp 'electric-indent-mode)
+  (electric-indent-mode 0))
+
 (when aquamacsp
   ;; Prevent Aquamacs from opening every buffer in a new frame.
   (one-buffer-one-frame-mode 0)
