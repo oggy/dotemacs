@@ -92,8 +92,8 @@
   (electric-indent-mode 0))
 
 (when aquamacsp
-  ;; Prevent Aquamacs from opening every buffer in a new frame.
   (tabbar-mode 0)
+  ;; Prevent Aquamacs from opening every buffer in a new frame.
   (one-buffer-one-frame-mode 0)
 
   ;; Used fixed-width font for text modes.

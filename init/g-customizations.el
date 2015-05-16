@@ -2,6 +2,7 @@
 (custom-set-variables
  '(aquamacs-additional-fontsets nil t)
  '(aquamacs-customization-version-id 150 t)
+ '(aquamacs-save-options-on-quit nil)
  '(backup-directory-alist (list (cons "" (concat rc-dir "/backups/"))))
  '(blink-cursor-interval 0.1)
  '(default-fill-column 80)
