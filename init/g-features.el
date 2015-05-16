@@ -93,6 +93,7 @@
 
 (when aquamacsp
   ;; Prevent Aquamacs from opening every buffer in a new frame.
+  (tabbar-mode 0)
   (one-buffer-one-frame-mode 0)
 
   ;; Used fixed-width font for text modes.
