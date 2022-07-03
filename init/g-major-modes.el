@@ -229,12 +229,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 
 ;;;; Ruby
 
-(require 'inf-ruby)
-;; For some ghastly reason, inf-ruby.el adds to ruby-mode-hook a
-;; lambda that calls inf-ruby-keys, which resets the default
-;; ruby-mode-map.
-(setq ruby-mode-hook nil)
-
 (g-when-starting-mode ruby
   (setq comment-start "#")
   (setq ruby-deep-arglist nil)           ; t?
