@@ -9,9 +9,12 @@
 
 (g-ensure-package 'coffee-mode)
 (g-ensure-package 'haml-mode)
+(g-ensure-package 'helm)
+(g-ensure-package 'helm-projectile)
 (g-ensure-package 'julia-mode)
 (g-ensure-package 'lua-mode)
 (g-ensure-package 'markdown-mode)
+(g-ensure-package 'projectile)
 (g-ensure-package 'sass-mode)
 (g-ensure-package 'scala-mode)
 (g-ensure-package 'yaml-mode)
