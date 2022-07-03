@@ -1,5 +1,6 @@
 *.elc
 /auto-save-list
 /backups
+/elpa
 /site.el
 /var
