@@ -23,6 +23,7 @@
 ;;;; Initializers
 
 (require 'g-fixes)
+(require 'g-packages)
 (require 'g-customizations)
 (require 'g-helpers)
 (require 'g-keymaps)
