@@ -84,7 +84,8 @@
 (remove-hook 'text-mode-hook 'smart-spacing-mode)
 
 ;; Start server.
-(unless (server-running-p)
+(require 'server)
+(unless server-process
   (server-start))
 
 ;; Turn off electric indent.
