@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-EMACS = '/Applications/Aquamacs.app/Contents/MacOS/Aquamacs'
+EMACS = 'emacs'
 ROOT = File.expand_path('..', File.dirname(__FILE__))
 PATHS = ["#{ROOT}/lib", "#{ROOT}/vendor"]
 
@@ -67,15 +67,8 @@ class App
 
   def compile
     files = @sources.select { |src| stale?("#{src}c", src) }
-    # aquamacs-mode-defaults adds edit-modes directories to the load path
-    lisp = <<-EOS
-      (progn
-        (require 'aquamacs)
-        (require 'aquamacs-aux)
-        (require 'aquamacs-mode-defaults))
-    EOS
     load_path_args = rc_load_path.map { |dir| ['--directory', dir] }
-    system *[EMACS, '-batch', '-q', load_path_args, '-eval', lisp.gsub(/\s+/m, ' '), '-f', 'batch-byte-compile', *files].flatten
+    system *[EMACS, '-batch', '-q', load_path_args, '-f', 'batch-byte-compile', *files].flatten
   end
 
   def generate_autoloads
