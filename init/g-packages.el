@@ -1,3 +1,7 @@
+(require 'package)
+(add-to-list 'package-archives
+  '("melpa" . "https://melpa.org/packages/") t)
+
 (defun g-ensure-package (package)
   "Install the named package (a symbol) if needed."
   (unless (package-installed-p package)
