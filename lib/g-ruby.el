@@ -1,6 +1,5 @@
 (eval-when-compile
-  (require 'ruby-mode)
-  (require 'inf-ruby))
+  (require 'ruby-mode))
 
 ;;;; Public
 
