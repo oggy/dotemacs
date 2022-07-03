@@ -24,9 +24,9 @@
 If MATCH is non-nil, only mention files matching that regexp."
   (let ((output (g-shell-command-output
                  "find" (expand-file-name dir) "-type" "f")))
-    (delete-if (lambda (path)
-                 (and match (not (string-match match path))))
-               (split-string output "\n" t))))
+    (cl-delete-if (lambda (path)
+                    (and match (not (string-match match path))))
+                  (split-string output "\n" t))))
 
 (defun g-shell-command-output (program &rest args)
   (with-temp-buffer
