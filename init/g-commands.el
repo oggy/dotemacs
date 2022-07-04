@@ -32,12 +32,13 @@ space after point."
         ((< (prefix-numeric-value dir) 0)
          (delete-region (save-excursion (skip-chars-backward " \t") (point)) (point)))))
 
-(defun g-comment (&optional s e n)
-  "Comment a region.
+(defun g-comment-or-uncomment (&optional s e n)
+  "Comment or uncomment a region.
 
-Like comment-region, but if no region is active, comment the current
-line.  Also, commented lines are indented, and comment stripping (that
-is, a negative prefix arg) works for indented comment lines.
+Like comment-or-uncomment-region, but if no region is active,
+comment or uncomment the current line.  Also, commented lines are
+indented, and comment stripping (that is, a negative prefix arg)
+works for indented comment lines.
 
 TODO: implement indented comment lines -- might be easier to rewrite
 comment-region from scratch."
@@ -47,7 +48,7 @@ comment-region from scratch."
             e (region-end))
     (setq s (point-at-bol)
           e (point-at-eol)))
-  (comment-region s e (or n current-prefix-arg)))
+  (comment-or-uncomment-region s e (or n current-prefix-arg)))
 
 (defun g-chmod (argstr)
   "Chmod the current buffer's file."
