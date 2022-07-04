@@ -17,6 +17,7 @@
 (g-ensure-package 'projectile)
 (g-ensure-package 'sass-mode)
 (g-ensure-package 'scala-mode)
+(g-ensure-package 'typescript-mode)
 (g-ensure-package 'yaml-mode)
 
 (require 'projectile)
