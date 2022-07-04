@@ -19,4 +19,6 @@
 (g-ensure-package 'scala-mode)
 (g-ensure-package 'yaml-mode)
 
+(require 'projectile)
+
 (provide 'g-packages)
