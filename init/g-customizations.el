@@ -14,8 +14,8 @@
  '(toolbar-visible-p nil)
  '(transient-mark-mode t)
  '(truncate-partial-width-windows nil)
- '(visible-bell t)
- '(user-email-address "george.ogata@gmail.com"))
+ '(user-email-address "george.ogata@gmail.com")
+ '(visible-bell nil))
 
 (custom-set-faces
  '(default ((t (:background "black" :foreground "white" :family "Monaco" :height 140))))
