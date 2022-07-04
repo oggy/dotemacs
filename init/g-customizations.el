@@ -14,7 +14,7 @@
  '(toolbar-visible-p nil)
  '(transient-mark-mode t)
  '(truncate-partial-width-windows nil)
- '(user-email-address "george.ogata@gmail.com")
+ '(user-mail-address "george.ogata@gmail.com")
  '(visible-bell nil))
 
 (custom-set-faces
