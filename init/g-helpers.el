@@ -33,4 +33,12 @@ If MATCH is non-nil, only mention files matching that regexp."
     (apply 'call-process program nil (current-buffer) nil args)
     (buffer-string)))
 
+(defun g-titleize (string)
+  (if (string-match "\\`[a-z0-9_-]+\\'" string)
+    (string-join (mapcar 'capitalize (split-string string "[ \f\t\n\r\v_-]+")) " ")
+    string))
+
+(defun g-project-roots ()
+  (delete-dups (remove nil (mapcar 'g-buffer-project-root (buffer-list)))))
+
 (provide 'g-helpers)
