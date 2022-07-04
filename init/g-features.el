@@ -83,6 +83,9 @@
 (when (functionp 'electric-indent-mode)
   (electric-indent-mode 0))
 
+;; Insertions should replace an active selection.
+(delete-selection-mode 1)
+
 (when aquamacsp
   (tabbar-mode 0)
   ;; Prevent Aquamacs from opening every buffer in a new frame.
