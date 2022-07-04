@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+require 'shellwords'
+
+EMACS = 'emacs'
+EMACSCLIENT = 'emacsclient'
+
+RC_DIR = File.expand_path('..', File.dirname(__FILE__))
+SERVERS_DIR = "#{RC_DIR}/servers"
+
+class App
+  def run(args)
+    args = parse_args(args)
+
+    if args.empty?
+      sh EMACS, background: true
+      return
+    end
+
+    path = File.expand_path(args.last)
+    candidates = Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
+      pid = server_path[/\d+/]
+      roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
+      pid && pid_live?(pid) && roots.any? { |r| path.start_with?(r) }
+    end
+
+    if candidates.empty?
+      sh EMACS, *args, background: true
+    else
+      sh EMACSCLIENT, '-n', '-s', File.basename(candidates[0]), *args
+    end
+  end
+
+  def parse_args(args)
+    result = []
+    args.each do |arg|
+      if arg.start_with?('+')
+        result << arg
+      elsif arg =~ /\A(.+):(\d+)\z/
+        result << "+#$2" << $1
+      else
+        result << arg
+      end
+    end
+    return result
+  end
+
+  def pid_live?(pid)
+    Process.kill(0, pid.to_i)
+    true
+  rescue Errno::ESRCH
+    false
+  end
+
+  def sh(*command, background: false)
+    STDERR.puts "++ #{command.shelljoin}#{' &' if background}"
+    if background
+      process = fork do
+        exec *command
+      end
+      Process.detach(process)
+    else
+      system *command
+    end
+  end
+end
+
+App.new.run(ARGV)

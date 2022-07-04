@@ -79,11 +79,6 @@
   (global-smart-spacing-mode 0))
 (remove-hook 'text-mode-hook 'smart-spacing-mode)
 
-;; Start server.
-(require 'server)
-(unless server-process
-  (server-start))
-
 ;; Turn off electric indent.
 (when (functionp 'electric-indent-mode)
   (electric-indent-mode 0))

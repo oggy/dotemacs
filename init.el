@@ -41,6 +41,7 @@
 (require 'g-blocks)
 (require 'g-overrides)
 (require 'g-features)
+(require 'g-server)
 
 ;; Load site-specific configuration from site.el.
 (let ((path (concat rc-dir "/site.el")))
