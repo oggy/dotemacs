@@ -4,7 +4,6 @@
  '(aquamacs-customization-version-id 150 t)
  '(aquamacs-save-options-on-quit nil)
  '(backup-directory-alist (list (cons "" (concat rc-dir "/backups/"))))
- '(blink-cursor-interval 0.1)
  '(default-fill-column 80)
  '(one-buffer-one-frame-mode nil nil (aquamacs-frame-setup))
  '(paren-mode (quote blink-paren) nil (paren))
