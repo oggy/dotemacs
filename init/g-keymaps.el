@@ -20,6 +20,7 @@
 (global-set-key (kbd "M-p")     'vertical-previous-line)
 (global-set-key (kbd "M-RET")   'g-end-block)
 (global-set-key (kbd "s-w")     'kill-current-buffer)
+(global-set-key (kbd "RET")     'electric-newline-and-maybe-indent)
 
 ;; Prefer Aquamacs undo/redo, fallback to vendor/redo.el.
 (if (fboundp 'aquamacs-redo)
