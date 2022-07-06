@@ -25,7 +25,7 @@
 
 ;; Hide screen clutter.
 (tool-bar-mode 0)
-(menu-bar-mode 0)
+(menu-bar-mode (if (and (display-graphic-p) (eq system-type 'darwin)) 1 0))
 (scroll-bar-mode 0)
 
 ;; enable minibuffer resizing
