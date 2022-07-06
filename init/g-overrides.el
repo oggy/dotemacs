@@ -21,7 +21,7 @@
                         (g-project-roots))))
     (string-join titles ", ")))
 
-(defun g-set-frame-titles ()
+(defun g-set-frame-titles (&optional frame)
   (let ((title (g-frame-title-base)))
     (setq frame-title-format
           (if (> (length (frame-list)) 1)
