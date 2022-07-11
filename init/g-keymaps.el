@@ -31,8 +31,7 @@
 
 ;; Make the quit sequence less accident-prone.
 (global-unset-key (kbd "C-x C-c"))
-;(global-set-key (kbd "C-x C-c C-x C-c") 'save-buffers-kill-emacs)  ;; this gives a warning on Aquamacs 2 - why?
-(define-key (current-global-map) (kbd "C-x C-c C-x C-c") 'save-buffers-kill-emacs)
+(global-set-key (kbd "C-x C-c C-x C-c") 'save-buffers-kill-emacs)
 
 ;;; Modes
 (global-set-key (kbd "C-c m a") 'js-mode)
