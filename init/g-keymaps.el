@@ -21,14 +21,7 @@
 (global-set-key (kbd "M-RET")   'g-end-block)
 (global-set-key (kbd "s-w")     'kill-current-buffer)
 (global-set-key (kbd "RET")     'electric-newline-and-maybe-indent)
-
-;; Prefer Aquamacs undo/redo, fallback to vendor/redo.el.
-(if (fboundp 'aquamacs-redo)
-    (progn
-      (global-set-key (kbd "C-/") 'aquamacs-undo)
-      (global-set-key (kbd "C-'") 'aquamacs-redo))
-  (global-set-key (kbd "C-'") 'redo))
-
+(global-set-key (kbd "C-'")     'undo-redo)
 (global-set-key (kbd "C-x /")   'point-to-register)
 (global-set-key (kbd "C-x j")   'jump-to-register)
 (global-set-key (kbd "C-TAB")   'g-select-next-window)

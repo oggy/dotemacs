@@ -6,9 +6,6 @@
 
 (require 'switcher)
 
-;; Enable redo.
-(require 'redo)
-
 ;; Enable active-mark-mode
 (require 'active-mark-mode)
 
