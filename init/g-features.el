@@ -85,6 +85,9 @@
 ;; Insertions should replace an active selection.
 (delete-selection-mode 1)
 
+;; Save & restore open files.
+(desktop-save-mode 1)
+
 (when aquamacsp
   (tabbar-mode 0)
   ;; Prevent Aquamacs from opening every buffer in a new frame.
