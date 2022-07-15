@@ -27,8 +27,9 @@
   "The list of buffers to present as options in the Switcher menu."
   (seq-filter
    (lambda (buffer)
-     (not (and (string-match "\\` " (buffer-name buffer))
-               (null (buffer-file-name buffer)))))
+     (not (or (and (string-match "\\` " (buffer-name buffer))
+                   (null (buffer-file-name buffer)))
+              (string= (buffer-name buffer) "*switcher*"))))
    (buffer-list)))
 
 (defun switcher-buffer-item (buffer)
