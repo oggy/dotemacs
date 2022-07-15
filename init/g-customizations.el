@@ -9,7 +9,7 @@
  '(paren-mode (quote blink-paren) nil (paren))
  '(scrollbars-visible-p nil)
  '(mark-even-if-inactive nil)
- '(size-indication-mode t)
+ '(size-indication-mode nil)
  '(toolbar-visible-p nil)
  '(transient-mark-mode t)
  '(truncate-partial-width-windows nil)
