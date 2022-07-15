@@ -246,6 +246,10 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-define-mode-keys scala
   "C-c C-l" 'g-scala-load-file)
 
+;;;; Prog modes
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;;;; Provide
 
 (provide 'g-major-modes)
