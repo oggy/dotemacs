@@ -15,13 +15,17 @@
   '((((class color)) :background "#2850ac" :extend t))
   "Face used for the current item in Switcher menu.")
 
-(defface switcher-menu-label-face
+(defface switcher-menu-buffer-name-face
   '((((class color)) :foreground "white" :extend t :height 1.4 :family "Sans Serif"))
-  "Face used for the primary label (e.g., buffer name) in Switcher menu items.")
+  "Face used for buffer names in Switcher menu.")
 
-(defface switcher-menu-sublabel-face
+(defface switcher-menu-modified-buffer-name-face
+  '((((class color)) :foreground "red" :inherit switcher-menu-buffer-name-face))
+  "Face used for modified buffer names in Switcher menu.")
+
+(defface switcher-menu-directory-face
   '((((class color)) :foreground "#d4d4d4" :extend t :height 1.0 :family "Sans Serif"))
-  "Face used for the secondary label (e.g., directory) in Switcher menu items.")
+  "Face used for buffer directories in Switcher menu.")
 
 (defun switcher-buffer-list ()
   "The list of buffers to present as options in the Switcher menu."
@@ -35,17 +39,17 @@
 (defun switcher-buffer-item (buffer)
   (let* ((item (make-hash-table))
          (file-name (buffer-file-name buffer))
-         (label (if file-name
-                    (file-name-nondirectory file-name)
-                  (replace-regexp-in-string "\\` " "" (buffer-name buffer))))
-         (sublabel (when file-name
-                     (switcher-buffer-sublabel buffer))))
+         (buffer-name (if file-name
+                          (file-name-nondirectory file-name)
+                        (replace-regexp-in-string "\\` " "" (buffer-name buffer))))
+         (directory (when file-name
+                      (switcher-buffer-directory buffer))))
     (puthash 'buffer buffer item)
-    (puthash 'label label item)
-    (puthash 'sublabel sublabel item)
+    (puthash 'buffer-name buffer-name item)
+    (puthash 'directory directory item)
     item))
 
-(defun switcher-buffer-sublabel (buffer)
+(defun switcher-buffer-directory (buffer)
   (let* ((file-name (buffer-file-name buffer)))
     (if file-name
         (let ((truename (file-truename (file-name-directory file-name)))
@@ -131,21 +135,26 @@
     (erase-buffer)
     (mapc
      (lambda (item)
-       (puthash
-        'overlay
-        (switcher-with-overlay
-         `((switcher-menu-item . t) (face . switcher-menu-item-face) (priority . 2))
-         (lambda ()
-           (switcher-with-overlay
-            '((face . switcher-menu-label-face) (priority . 1))
-            (lambda ()
-              (insert (or (gethash 'label item) " "))))
-           (insert "  ")
-           (switcher-with-overlay
-            '((face . switcher-menu-sublabel-face) (priority . 1))
-            (lambda ()
-              (insert (or (gethash 'sublabel item) " ") "\n")))))
-        item))
+       (let* ((buffer (gethash 'buffer item))
+              (buffer-name-face (if (and (buffer-file-name buffer)
+                                         (buffer-modified-p buffer))
+                                    'switcher-menu-modified-buffer-name-face
+                                  'switcher-menu-buffer-name-face)))
+         (puthash
+          'overlay
+          (switcher-with-overlay
+           `((switcher-menu-item . t) (face . switcher-menu-item-face) (priority . 2))
+           (lambda ()
+             (switcher-with-overlay
+              `((face . ,buffer-name-face) (priority . 1))
+              (lambda ()
+                (insert (or (gethash 'buffer-name item) " "))))
+             (insert "  ")
+             (switcher-with-overlay
+              '((face . switcher-menu-directory-face) (priority . 1))
+              (lambda ()
+                (insert (or (gethash 'directory item) " ") "\n")))))
+          item)))
      switcher-items)
     (switcher-set-item-face switcher-current-index 'switcher-menu-current-item-face)
     (let* ((home-frame (window-frame switcher-home-window))
