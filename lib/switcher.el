@@ -114,45 +114,53 @@
                                             (z-group . above)
                                             (alpha . 85)
                                             (cursor-type . nil)))
-          switcher-menu-buffer (generate-new-buffer "*switcher*")
-          switcher-items (apply 'vector (mapcar 'switcher-buffer-item (switcher-buffer-list))))
+          switcher-menu-buffer (generate-new-buffer "*switcher*"))
     (set-window-buffer (car (window-list switcher-menu-frame)) switcher-menu-buffer)
     (with-current-buffer switcher-menu-buffer
-      (mapc
-       (lambda (item)
-         (puthash
-          'overlay
-          (switcher-with-overlay
-           `((switcher-menu-item . t) (face . switcher-menu-item-face) (priority . 2))
-           (lambda ()
-             (switcher-with-overlay
-              '((face . switcher-menu-label-face) (priority . 1))
-              (lambda ()
-                (insert (or (gethash 'label item) " "))))
-             (insert "  ")
-             (switcher-with-overlay
-              '((face . switcher-menu-sublabel-face) (priority . 1))
-              (lambda ()
-                (insert (or (gethash 'sublabel item) " ") "\n")))))
-          item))
-       switcher-items)
-      (setq line-spacing 0.2)
-      (let* ((home-frame (window-frame switcher-home-window))
-             (hpos (frame-position home-frame))
-             (hx (car hpos))
-             (hy (cdr hpos))
-             (hw (frame-pixel-width home-frame))
-             (hh (frame-pixel-height home-frame))
-             (msize (window-text-pixel-size (selected-window) nil t))
-             (mw (+ (car msize) 8)) ; hack to avoid a \-continuation
-             (mh (min (cdr msize) hh))
-             (mx (+ hx (/ (- hw mw 30) 2)))
-             (my (+ hy (/ (- hh mh 30) 2))))
-        (set-frame-position switcher-menu-frame mx my)
-        (set-frame-size switcher-menu-frame mw mh t))
-      (setq switcher-current-index 0)
-      (setq mode-line-format nil))
+      (setq switcher-current-index 0
+            mode-line-format nil
+            line-spacing 0.2))
+    (switcher-refresh-menu)
     (switcher-active-mode 1)))
+
+(defun switcher-refresh-menu ()
+  (setq switcher-items (apply 'vector (mapcar 'switcher-buffer-item (switcher-buffer-list))))
+  (when (>= switcher-current-index (length switcher-items))
+    (setq switcher-current-index (1- (length switcher-items))))
+  (with-current-buffer switcher-menu-buffer
+    (erase-buffer)
+    (mapc
+     (lambda (item)
+       (puthash
+        'overlay
+        (switcher-with-overlay
+         `((switcher-menu-item . t) (face . switcher-menu-item-face) (priority . 2))
+         (lambda ()
+           (switcher-with-overlay
+            '((face . switcher-menu-label-face) (priority . 1))
+            (lambda ()
+              (insert (or (gethash 'label item) " "))))
+           (insert "  ")
+           (switcher-with-overlay
+            '((face . switcher-menu-sublabel-face) (priority . 1))
+            (lambda ()
+              (insert (or (gethash 'sublabel item) " ") "\n")))))
+        item))
+     switcher-items)
+    (switcher-set-item-face switcher-current-index 'switcher-menu-current-item-face)
+    (let* ((home-frame (window-frame switcher-home-window))
+           (hpos (frame-position home-frame))
+           (hx (car hpos))
+           (hy (cdr hpos))
+           (hw (frame-pixel-width home-frame))
+           (hh (frame-pixel-height home-frame))
+           (msize (window-text-pixel-size (selected-window) nil t))
+           (mw (+ (car msize) 8)) ; hack to avoid a \-continuation
+           (mh (min (cdr msize) hh))
+           (mx (+ hx (/ (- hw mw 30) 2)))
+           (my (+ hy (/ (- hh mh 30) 2))))
+      (set-frame-position switcher-menu-frame mx my)
+      (set-frame-size switcher-menu-frame mw mh t))))
 
 (defun switcher-with-overlay (overlay-properties f)
   (let ((start (point)))
@@ -188,6 +196,8 @@
 (define-key switcher-active-mode-map (kbd "M-<up>") 'switcher-previous)
 (define-key switcher-active-mode-map (kbd "M-<down>") 'switcher-next)
 (define-key switcher-active-mode-map (kbd "M-RET") 'switcher-hide-menu)
+(define-key switcher-active-mode-map (kbd "M-s") 'switcher-save-buffer)
+(define-key switcher-active-mode-map (kbd "M-w") 'switcher-kill-buffer)
 
 (define-minor-mode switcher-active-mode
   "Minor mode enabled while the Switcher menu is visible."
@@ -207,6 +217,31 @@
 (put 'switcher-next 'switcher-menu-command t)
 (put 'switcher-previous 'switcher-menu-command t)
 (put 'switcher-hide-menu 'switcher-menu-command t)
+(put 'switcher-save-buffer 'switcher-menu-command t)
+(put 'switcher-kill-buffer 'switcher-menu-command t)
+
+(defun switcher-save-buffer ()
+  "Save the current buffer and update the Switcher menu."
+  (interactive)
+  (save-buffer)
+  (save-selected-window
+    (select-window (car (window-list switcher-menu-frame)))
+    (switcher-refresh-menu)
+    (switcher-recenter)))
+
+(defun switcher-kill-buffer ()
+  "Kill the current buffer and update the Switcher menu."
+  (interactive)
+  (let* ((original-buffer (current-buffer))
+         (next-index (mod (1+ switcher-current-index) (length switcher-items)))
+         (next-item (elt switcher-items next-index)))
+    (set-window-buffer switcher-home-window (gethash 'buffer next-item))
+    (when (not (kill-buffer original-buffer))
+      (set-window-buffer switcher-home-window original-buffer)))
+  (save-selected-window
+    (select-window (car (window-list switcher-menu-frame)))
+    (switcher-refresh-menu)
+    (switcher-recenter)))
 
 (defun switcher-set-item-face (index face)
   (let* ((item (elt switcher-items index))
