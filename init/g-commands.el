@@ -138,4 +138,22 @@ property."
       (insert code)
       (indent-for-tab-command))))
 
+(defun g-copy-relative-path ()
+  "Copy path to kill ring & clipboard."
+  (interactive)
+  (let* ((absolute-path (buffer-file-name))
+         (prefix (concat g-start-dir "/"))
+         (relative-path (if (and prefix
+                                 (string= (substring absolute-path 0 (length prefix)) prefix))
+                           (substring absolute-path (length prefix))
+                         absolute-path)))
+    (kill-new relative-path)
+    (message "%s" relative-path)))
+
+(defun g-copy-absolute-path ()
+  "Copy path to kill ring & clipboard."
+  (interactive)
+  (kill-new (buffer-file-name))
+  (message "%s" (buffer-file-name)))
+
 (provide 'g-commands)
