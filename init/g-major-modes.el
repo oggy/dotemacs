@@ -246,6 +246,11 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 (g-define-mode-keys scala
   "C-c C-l" 'g-scala-load-file)
 
+;;;; TypeScript
+
+(g-when-starting-mode typescript
+  (setq typescript-indent-level 2))
+
 ;;;; Prog modes
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
