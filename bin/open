@@ -24,6 +24,8 @@ class App
       pid && pid_live?(pid) && roots.any? { |r| path.start_with?(r) }
     end
 
+    ENV['G_START_DIR'] = Dir.pwd
+
     if candidates.empty?
       sh EMACS, *args, background: true
     else

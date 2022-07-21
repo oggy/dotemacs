@@ -6,6 +6,11 @@
 
 (require 'switcher)
 
+(when g-start-dir
+  (cd g-start-dir)
+  (setq desktop-path (list (concat rc-dir "/var/desktops"))
+        desktop-base-file-name (concat (string-replace "/" "!" g-start-dir) ".emacs.desktop")))
+
 ;; Enable active-mark-mode
 (require 'active-mark-mode)
 
