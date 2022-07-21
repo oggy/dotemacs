@@ -48,7 +48,7 @@
 ;; Make cursor blink.
 (setq blink-cursor-interval 0.1)
 (setq blink-cursor-blinks 0)
-(setq cursor-type '(bar . 2))
+(setq-default cursor-type '(bar . 2))
 (blink-cursor-mode 1)
 
 ;; Keep everything in one window.
