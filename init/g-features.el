@@ -93,6 +93,11 @@
 ;; Save & restore open files.
 (desktop-save-mode 1)
 
+;; Mode line
+(line-number-mode 1)
+(column-number-mode 1)
+(setq mode-line-position-column-line-format (list " L%l C%c"))
+
 (when aquamacsp
   (tabbar-mode 0)
   ;; Prevent Aquamacs from opening every buffer in a new frame.
