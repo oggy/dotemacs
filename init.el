@@ -18,7 +18,6 @@
 
 (add-to-load-path (rc-path "init"))
 (add-to-load-path (rc-path "lib"))
-(add-to-load-path (rc-path "vendor"))
 
 ;;;; Initializers
 
