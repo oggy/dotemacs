@@ -2,7 +2,7 @@
 
 EMACS = 'emacs'
 ROOT = File.expand_path('..', File.dirname(__FILE__))
-PATHS = ["#{ROOT}/lib", "#{ROOT}/vendor"]
+PATHS = ["#{ROOT}/lib"]
 
 require 'optparse'
 require 'fileutils'
