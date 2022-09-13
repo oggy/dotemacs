@@ -241,11 +241,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   "C-c s"   'g-ruby-insert-heading
 )
 
-;;;; Scala
-
-(g-define-mode-keys scala
-  "C-c C-l" 'g-scala-load-file)
-
 ;;;; TypeScript
 
 (g-when-starting-mode typescript
