@@ -13,7 +13,7 @@
 
 ;;; Overrides (or non-\C-c)
 (global-set-key (kbd "C-x w")   'g-save-buffer-rename)
-(global-set-key (kbd "C-x C-f") 'helm-projectile-find-file-dwim)
+(global-set-key (kbd "C-x C-f") 'helm-projectile-find-file)
 (global-set-key (kbd "C-x C-x") 'g-exchange-point-and-mark)
 (global-set-key (kbd "C-h C-a") 'apropos-documentation)
 (global-set-key (kbd "M-`")     'lisp-complete-symbol)
