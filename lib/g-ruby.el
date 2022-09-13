@@ -3,7 +3,7 @@
 
 ;;;; Public
 
-(declare-function replace-in-string)
+(declare-function replace-in-string nil)
 
 ;;;###autoload
 (defun g-gem-dir (&optional arg)
