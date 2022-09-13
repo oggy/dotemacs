@@ -40,6 +40,7 @@ any file with that extension should be loaded with MODE."
 (auto-mode 'conf-mode 'cnf ".gitconfig")  ; e.g., my.cnf
 (auto-mode 'scala-mode 'scala)
 (auto-mode 'julia-mode 'jl)
+(auto-mode 'typescript-mode 'ts 'tsx)
 
 (interpreter-mode 'js-mode "node")
 
