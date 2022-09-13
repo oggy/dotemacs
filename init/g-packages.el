@@ -8,6 +8,7 @@
     (package-install package)))
 
 (g-ensure-package 'coffee-mode)
+(g-ensure-package 'git-link)
 (g-ensure-package 'haml-mode)
 (g-ensure-package 'helm)
 (g-ensure-package 'helm-projectile)

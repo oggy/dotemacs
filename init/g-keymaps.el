@@ -64,6 +64,7 @@
 (global-set-key (kbd "C-c d")     'g-insert-breakpoint)
 (global-set-key (kbd "C-c i")     'manual-entry)
 (global-set-key (kbd "C-c e")     'eval-current-buffer)
+(global-set-key (kbd "C-c g o")   'git-link)
 (global-set-key (kbd "C-c l")     'g-copy-relative-path)
 (global-set-key (kbd "C-c q")     'g-insert-char-by-number)
 (global-set-key (kbd "C-c x")     'g-toggle-debug-on-error)
