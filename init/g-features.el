@@ -39,6 +39,9 @@
 ;; Keep autosaves in one place.
 (setq auto-save-directory (concat rc-dir "/autosaves"))
 
+;; Refresh files automatically when they change (if not modified).
+(global-auto-revert-mode 1)
+
 ;; Enable transient-mark-mode (region highlighting).
 (transient-mark-mode)
 
