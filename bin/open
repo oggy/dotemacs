@@ -27,7 +27,7 @@ class App
     ENV['G_START_DIR'] = Dir.pwd
 
     if candidates.empty?
-      sh EMACS, *args, background: true
+      sh EMACS, '--debug-init', *args, background: true
     else
       sh EMACSCLIENT, '-n', '-s', File.basename(candidates[0]), *args
     end
