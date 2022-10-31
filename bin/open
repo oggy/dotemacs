@@ -15,15 +15,14 @@ class App
     ENV['G_START_DIR'] = Dir.pwd
 
     if args.empty?
-      sh EMACS, background: true
-      return
-    end
-
-    path = File.expand_path(args.last)
-    candidates = Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
-      pid = server_path[/\d+/]
-      roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
-      pid && pid_live?(pid) && roots.any? { |r| path.start_with?(r) }
+      candidates = []
+    else
+      path = File.expand_path(args.last)
+      candidates = Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
+        pid = server_path[/\d+/]
+        roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
+        pid && pid_live?(pid) && roots.any? { |r| path.start_with?(r) }
+      end
     end
 
     if candidates.empty?
