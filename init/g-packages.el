@@ -26,5 +26,8 @@
 
 (require 'projectile)
 (require 'helm-projectile)
+(defun g-project-root (dir)
+  g-start-dir)
+(add-to-list 'projectile-project-root-functions 'g-project-root nil)
 
 (provide 'g-packages)
