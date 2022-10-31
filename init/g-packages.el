@@ -25,5 +25,6 @@
 (g-ensure-package 'yaml-mode)
 
 (require 'projectile)
+(require 'helm-projectile)
 
 (provide 'g-packages)
