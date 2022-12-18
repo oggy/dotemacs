@@ -19,6 +19,7 @@
 (g-ensure-package 'julia-mode)
 (g-ensure-package 'lua-mode)
 (g-ensure-package 'markdown-mode)
+(g-ensure-package 'nim-mode)
 (g-ensure-package 'projectile)
 (g-ensure-package 'rust-mode)
 (g-ensure-package 'sass-mode)
