@@ -32,6 +32,35 @@ space after point."
         ((< (prefix-numeric-value dir) 0)
          (delete-region (save-excursion (skip-chars-backward " \t") (point)) (point)))))
 
+(defun g-indent-line-or-region ()
+  (interactive)
+  (let ((indent "  "))
+    (save-excursion
+      (save-restriction
+        (if (region-active-p)
+            (narrow-to-region (region-beginning) (region-end))
+          (narrow-to-region (point-at-bol) (point-at-eol)))
+        (goto-char (point-min))
+        (while (not (eobp))
+          (save-excursion (insert indent))
+          (forward-line 1))))
+    (setq deactivate-mark nil)))
+
+(defun g-outdent-line-or-region ()
+  (interactive)
+  (let ((indent "  "))
+    (save-excursion
+      (save-restriction
+        (if (region-active-p)
+            (narrow-to-region (region-beginning) (region-end))
+          (narrow-to-region (point-at-bol) (point-at-eol)))
+        (goto-char (point-min))
+        (while (not (eobp))
+          (when (looking-at (regexp-quote indent))
+            (delete-char (length indent)))
+          (forward-line 1))))
+    (setq deactivate-mark nil)))
+
 (defun g-comment-or-uncomment (&optional s e n)
   "Comment or uncomment a region.
 

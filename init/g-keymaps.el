@@ -78,6 +78,8 @@
 (global-set-key (kbd "C-c \\")    'slosh)
 (global-set-key (kbd "C-c C-l")   'g-copy-absolute-path)
 (global-set-key (kbd "s-/")       'g-comment-or-uncomment)
+(global-set-key (kbd "s-[")       'g-outdent-line-or-region)
+(global-set-key (kbd "s-]")       'g-indent-line-or-region)
 (global-set-key (kbd "C-<tab>")   'switcher-next)
 (global-set-key (kbd "C-S-<tab>") 'switcher-previous)
 (global-set-key (kbd "M-[")       'switcher-previous)
