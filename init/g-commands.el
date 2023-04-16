@@ -42,7 +42,8 @@ space after point."
           (narrow-to-region (point-at-bol) (point-at-eol)))
         (goto-char (point-min))
         (while (not (eobp))
-          (save-excursion (insert indent))
+          (unless (= (point-at-bol) (point-at-eol))
+            (save-excursion (insert indent)))
           (forward-line 1))))
     (setq deactivate-mark nil)))
 
