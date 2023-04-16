@@ -26,6 +26,7 @@
 (g-ensure-package 'scala-mode)
 (g-ensure-package 'typescript-mode)
 (g-ensure-package 'yaml-mode)
+(g-ensure-package 'zig-mode)
 
 (require 'projectile)
 (require 'helm-projectile)

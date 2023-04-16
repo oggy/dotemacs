@@ -32,5 +32,6 @@ it."
 (put 'ruby-mode 'g-block-end-delimiter "end")
 (put 'scala-mode 'g-block-end-delimiter "}")
 (put 'typescript-mode 'g-block-end-delimiter "}")
+(put 'zig-mode 'g-block-end-delimiter "}")
 
 (provide 'g-blocks)
