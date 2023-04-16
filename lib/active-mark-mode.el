@@ -8,7 +8,7 @@
 
 This mode is automatically toggled. Simply ensure this file is
 loaded when emacs starts up."
-  :init-value t
+  :init-value nil
   :keymap 'active-mark-mode-map
   :lighter " [A]")
 
