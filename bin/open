@@ -21,7 +21,7 @@ class App
       candidates = Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
         pid = server_path[/\d+/]
         roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
-        pid && pid_live?(pid) && roots.any? { |r| path.start_with?(r) }
+        pid && pid_live?(pid) && roots.any? { |r| path == r || path.start_with?("#{r}/") }
       end
     end
 
