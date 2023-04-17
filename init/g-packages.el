@@ -24,6 +24,7 @@
 (g-ensure-package 'rust-mode)
 (g-ensure-package 'sass-mode)
 (g-ensure-package 'scala-mode)
+(g-ensure-package 'terraform-mode)
 (g-ensure-package 'typescript-mode)
 (g-ensure-package 'yaml-mode)
 (g-ensure-package 'zig-mode)
