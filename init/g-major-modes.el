@@ -231,9 +231,12 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 
 (g-when-starting-mode ruby
   (setq comment-start "#")
+  (setq ruby-block-indent nil)
   (setq ruby-deep-arglist nil)           ; t?
   (setq ruby-deep-indent-paren '(?\( t))
   (setq ruby-deep-indent-paren-style 'space)
+  (setq ruby-method-call-indent nil)
+  (setq ruby-method-params-indent nil)
   (put 'ruby-mode 'g-breakpoint-code "require 'debugger'; debugger"))
 
 (g-define-mode-keys ruby
