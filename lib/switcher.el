@@ -11,6 +11,39 @@
   '((((class color)) :extend t))
   "Face used for items in Switcher menu.")
 
+(defvar switcher-buffer-list nil
+  "Ordered list of most recently switched-to buffers.
+
+Using buffer-list seems to be affected by calls to
+set-window-buffer, even when given a window that isn't the
+current one.
+
+Therefore, we maintain our own buffer list, which is not affected
+by simply showing the window as we flip through items in the
+menu.
+
+This list won't necessarily contain all buffers, just the most
+recently switched-to ones since switcher was loaded.")
+;(setq switcher-buffer-list nil)
+
+(defvar switcher-ignore-buffer-switch nil
+  "Prevents buffer switches modifying the order of switcher buffers.")
+
+(defun switcher-buffer-list-updated ()
+  (unless switcher-ignore-buffer-switch
+    (switcher-move-current-buffer-to-front)))
+
+(defun switcher-move-current-buffer-to-front ()
+  (let* ((current (current-buffer))
+         (tail (remove current switcher-buffer-list)))
+    (unless (or (eq current switcher-menu-buffer)
+                ;; This command seems to fire the buffer-list-update-hook as we
+                ;; flip through buffers in the list.
+                (eq this-command 'handle-switch-frame))
+      (setq switcher-buffer-list (cons current tail)))))
+
+(add-hook 'buffer-list-update-hook 'switcher-buffer-list-updated)
+
 (defface switcher-menu-current-item-face
   '((((class color)) :background "#2850ac" :extend t))
   "Face used for the current item in Switcher menu.")
@@ -27,14 +60,24 @@
   '((((class color)) :foreground "#d4d4d4" :extend t :height 1.0 :family "Sans Serif"))
   "Face used for buffer directories in Switcher menu.")
 
-(defun switcher-buffer-list ()
+(defun switcher-list-to-set (list)
+  (let ((set (make-hash-table :size (length list))))
+    (seq-doseq (el list)
+      (puthash el t set))
+    set))
+
+(defun switcher-list-buffers ()
   "The list of buffers to present as options in the Switcher menu."
-  (seq-filter
-   (lambda (buffer)
-     (not (or (and (string-match "\\` " (buffer-name buffer))
-                   (null (buffer-file-name buffer)))
-              (string= (buffer-name buffer) "*switcher*"))))
-   (buffer-list)))
+  (let* ((our-list (seq-filter 'buffer-live-p switcher-buffer-list))
+         (set (switcher-list-to-set our-list))
+         (rest (seq-filter (lambda (buf) (not (gethash buf set))) (buffer-list)))
+         (full-list (append our-list rest)))
+    (seq-filter
+     (lambda (buffer)
+       (not (or (and (string-match "\\` " (buffer-name buffer))
+                     (null (buffer-file-name buffer)))
+                (string= (buffer-name buffer) "*switcher*"))))
+     full-list)))
 
 (defun switcher-buffer-item (buffer)
   (let* ((item (make-hash-table))
@@ -62,25 +105,31 @@
              truename)))
       "")))
 
+(defmacro switcher-ignoring-buffer-switch (&rest forms)
+  `(let ((switcher-ignore-buffer-switch t))
+     ,@forms))
+
 (defun switcher-next ()
   "Show the Switcher menu and move to the next buffer."
   (interactive)
-  (switcher-show-menu)
-  (switcher-bump-timeout)
-  (save-selected-window
-    (select-window (car (window-list switcher-menu-frame)))
-    (with-current-buffer switcher-menu-buffer
-      (switcher-menu-move 1))))
+  (switcher-ignoring-buffer-switch
+   (switcher-show-menu)
+   (switcher-bump-timeout)
+   (save-selected-window
+     (select-window (car (window-list switcher-menu-frame)))
+     (with-current-buffer switcher-menu-buffer
+       (switcher-menu-move 1)))))
 
 (defun switcher-previous ()
   "Show the Switcher menu and move to the previous buffer."
   (interactive)
-  (switcher-show-menu)
-  (switcher-bump-timeout)
-  (save-selected-window
-    (select-window (car (window-list switcher-menu-frame)))
-    (with-current-buffer switcher-menu-buffer
-      (switcher-menu-move -1))))
+  (switcher-ignoring-buffer-switch
+   (switcher-show-menu)
+   (switcher-bump-timeout)
+   (save-selected-window
+     (select-window (car (window-list switcher-menu-frame)))
+     (with-current-buffer switcher-menu-buffer
+       (switcher-menu-move -1)))))
 
 (defvar switcher-timer nil
   "Timer to deactivate the Switcher menu, when active.")
@@ -128,7 +177,7 @@
     (switcher-active-mode 1)))
 
 (defun switcher-refresh-menu ()
-  (setq switcher-items (apply 'vector (mapcar 'switcher-buffer-item (switcher-buffer-list))))
+  (setq switcher-items (apply 'vector (mapcar 'switcher-buffer-item (switcher-list-buffers))))
   (when (>= switcher-current-index (length switcher-items))
     (setq switcher-current-index (1- (length switcher-items))))
   (with-current-buffer switcher-menu-buffer
@@ -187,16 +236,18 @@
 
 (defun switcher-hide-menu ()
   (interactive)
-  (when switcher-menu-buffer
-    (kill-buffer switcher-menu-buffer)
-    (setq switcher-menu-buffer nil))
-  (when switcher-menu-frame
-    (delete-frame switcher-menu-frame)
-    (setq switcher-menu-frame nil))
-  (when switcher-timer
-    (cancel-timer switcher-timer)
-    (setq switcher-timer nil))
-  (switcher-active-mode 0))
+  (switcher-ignoring-buffer-switch
+   (when switcher-menu-buffer
+     (kill-buffer switcher-menu-buffer)
+     (setq switcher-menu-buffer nil))
+   (when switcher-menu-frame
+     (delete-frame switcher-menu-frame)
+     (setq switcher-menu-frame nil))
+   (when switcher-timer
+     (cancel-timer switcher-timer)
+     (setq switcher-timer nil))
+   (switcher-active-mode 0))
+ (switcher-move-current-buffer-to-front))
 
 ;; switcher-active-mode
 
@@ -232,25 +283,27 @@
 (defun switcher-save-buffer ()
   "Save the current buffer and update the Switcher menu."
   (interactive)
-  (save-buffer)
-  (save-selected-window
-    (select-window (car (window-list switcher-menu-frame)))
-    (switcher-refresh-menu)
-    (switcher-recenter)))
+  (switcher-ignoring-buffer-switch
+   (save-buffer)
+   (save-selected-window
+     (select-window (car (window-list switcher-menu-frame)))
+     (switcher-refresh-menu)
+     (switcher-recenter))))
 
 (defun switcher-kill-buffer ()
   "Kill the current buffer and update the Switcher menu."
   (interactive)
-  (let* ((original-buffer (current-buffer))
-         (next-index (mod (1+ switcher-current-index) (length switcher-items)))
-         (next-item (elt switcher-items next-index)))
-    (set-window-buffer switcher-home-window (gethash 'buffer next-item))
-    (when (not (kill-buffer original-buffer))
-      (set-window-buffer switcher-home-window original-buffer)))
-  (save-selected-window
-    (select-window (car (window-list switcher-menu-frame)))
-    (switcher-refresh-menu)
-    (switcher-recenter)))
+  (switcher-ignoring-buffer-switch
+   (let* ((original-buffer (current-buffer))
+          (next-index (mod (1+ switcher-current-index) (length switcher-items)))
+          (next-item (elt switcher-items next-index)))
+     (set-window-buffer switcher-home-window (gethash 'buffer next-item))
+     (when (not (kill-buffer original-buffer))
+       (set-window-buffer switcher-home-window original-buffer)))
+   (save-selected-window
+     (select-window (car (window-list switcher-menu-frame)))
+     (switcher-refresh-menu)
+     (switcher-recenter))))
 
 (defun switcher-set-item-face (index face)
   (let* ((item (elt switcher-items index))
