@@ -37,7 +37,7 @@
 (put 'narrow-to-region 'disabled nil)
 
 ;; Keep autosaves in one place.
-(setq auto-save-directory (concat rc-dir "/autosaves"))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;; Refresh files automatically when they change (if not modified).
 (global-auto-revert-mode 1)
