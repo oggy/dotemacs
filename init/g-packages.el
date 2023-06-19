@@ -36,4 +36,13 @@
   g-start-dir)
 (add-to-list 'projectile-project-root-functions 'g-project-root nil)
 
+;; We always want to use g-start-dir as the project root.
+;;
+;; If there's no VCS marker (e.g., .git) in the project root, projectile will go
+;; up the tree looking for an ancestor that does. It uses this function to find
+;; such a path. So here we force that to nil to effectively ignore all dirs
+;; outside g-start-dir.
+(when (boundp 'g-start-dir)
+  (defun projectile-locate-dominating-file (&rest _) nil))
+
 (provide 'g-packages)
