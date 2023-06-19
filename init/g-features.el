@@ -8,8 +8,10 @@
 
 (when g-start-dir
   (cd g-start-dir)
-  (setq desktop-path (list (concat rc-dir "/var/desktops"))
-        desktop-base-file-name (concat (string-replace "/" "!" g-start-dir) ".emacs.desktop")))
+  (setq desktop-dirname (concat rc-dir "/var/desktops")
+        desktop-path (list desktop-dirname)
+        desktop-base-file-name (concat (string-replace "/" "!" g-start-dir) ".emacs.desktop"))
+  (make-directory desktop-dirname t))
 
 ;; Enable active-mark-mode
 (require 'active-mark-mode)
