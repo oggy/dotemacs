@@ -41,7 +41,4 @@ If MATCH is non-nil, only mention files matching that regexp."
 (defun g-project-roots ()
   (delete-dups (remove nil (mapcar 'g-buffer-project-root (buffer-list)))))
 
-(defvar g-start-dir (getenv "G_START_DIR")
-  "Root of project this Emacs was started in, if any.")
-
 (provide 'g-helpers)

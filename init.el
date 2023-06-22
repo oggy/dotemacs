@@ -1,3 +1,6 @@
+(defvar g-start-dir (getenv "G_START_DIR")
+  "Root of project this Emacs was started in, if any.")
+
 ;;;; Load Path
 
 (defvar rc-dir (expand-file-name "~/.emacs.d")
