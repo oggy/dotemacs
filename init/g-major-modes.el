@@ -163,7 +163,6 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 
 ;;;; CSS
 
-(add-hook 'css-mode-hook 'cssm-leave-mirror-mode)
 (setq css-indent-offset 2)
 
 ;;;; Markdown

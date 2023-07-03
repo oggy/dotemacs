@@ -24,6 +24,7 @@
 (g-ensure-package 'rust-mode)
 (g-ensure-package 'sass-mode)
 (g-ensure-package 'scala-mode)
+(g-ensure-package 'scss-mode)
 (g-ensure-package 'sqlformat)
 (g-ensure-package 'terraform-mode)
 (g-ensure-package 'typescript-mode)
