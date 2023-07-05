@@ -1,6 +1,6 @@
 class #{module} < ApplicationController
-  before_filter :make_#{resource}, only: [:new, :create]
-  before_filter :load_#{resource}, only: [:show, :edit, :update, :destroy]
+  before_action :make_#{resource}, only: [:new, :create]
+  before_action :load_#{resource}, only: [:show, :edit, :update, :destroy]
 
   def index
     @#{resources} = #{model}.page(1).per(20)
@@ -10,12 +10,12 @@ class #{module} < ApplicationController
   end
 
   def create
-    if @#{resource}.update_attributes(params[:#{resource}])
+    if @#{resource}.update(#{resource}_params)
       flash_notice
       redirect_to #{resource}_path(@#{resource})
     else
       flash_error
-      render :new
+      render :new, status: 422
     end
   end
 
@@ -26,12 +26,12 @@ class #{module} < ApplicationController
   end
 
   def update
-    if @#{resource}.update_attributes(params[:#{resource}])
+    if @#{resource}.update_attributes(#{resource}_params)
       flash_notice
       redirect_to #{resource}_path(@#{resource})
     else
       flash_error
-      render :edit
+      render :edit, status: 422
     end
   end
 
@@ -50,5 +50,9 @@ class #{module} < ApplicationController
   def load_#{resource}
     @#{resource} = #{model}.find_by_id(params[:id]) or
       render status: 404, text: 'Not Found'
+  end
+
+  def #{resource}_params
+    params.require(:#{resource}).permit(...)
   end
 end
