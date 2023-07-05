@@ -1,3 +1,11 @@
+;; Stop cus-edit butchering my init.el.
+(setq custom-file (concat rc-dir "/custom.el"))
+
+;; And don't load what it writes. It includes settings that are machine
+;; dependent, so I don't want these in my sync'd config. Settings are manually
+;; maintained in g-customizations.
+;; (load custom-file)
+
 ;; Don't make font-lock-mode give up so easily.
 (setq font-lock-maximum-size 400000)
 

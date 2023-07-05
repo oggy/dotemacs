@@ -1,6 +1,7 @@
 *.elc
 /auto-save-list
 /backups
+/custom.el
 /elpa
 /servers
 /site.el
