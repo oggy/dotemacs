@@ -171,10 +171,10 @@ property."
 (defun g-copy-relative-path ()
   "Copy path to kill ring & clipboard."
   (interactive)
-  (let* ((absolute-path (buffer-file-name))
+  (let* ((absolute-path (or (buffer-file-name) ""))
          (prefix (concat g-start-dir "/"))
          (relative-path (if (and prefix
-                                 (string= (substring absolute-path 0 (length prefix)) prefix))
+                                 (string-prefix-p prefix absolute-path))
                            (substring absolute-path (length prefix))
                          absolute-path)))
     (kill-new relative-path)
