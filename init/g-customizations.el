@@ -7,6 +7,7 @@
  '(dired-use-ls-dired nil)
  '(fill-column 80)
  '(git-link-open-in-browser t)
+ '(git-link-use-commit t)
  '(helm-find-files-ignore-thing-at-point t)
  '(one-buffer-one-frame-mode nil nil (aquamacs-frame-setup))
  '(paren-mode (quote blink-paren) nil (paren))
