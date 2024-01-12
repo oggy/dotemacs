@@ -86,8 +86,8 @@
   (let* ((relative-path (rails-strip-prefix path prefix))
          (stem (replace-regexp-in-string "\\.rb\\'" "" relative-path))
          (module (rails-camelize stem))
-         (superclass (if (file-exists-p (concat rails-root "/app/models/application_model.rb"))
-                         "ApplicationModel"
+         (superclass (if (file-exists-p (concat rails-root "/app/models/application_record.rb"))
+                         "ApplicationRecord"
                        "ActiveRecord::Base"))
          (vars (make-hash-table :test 'equal)))
     (puthash "module" module vars)
