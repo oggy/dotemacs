@@ -134,7 +134,7 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 ;; JS
 
 (g-define-mode-keys js
-  "C-c l" 'g-js-insert-console-log
+  "C-c L" 'g-js-insert-console-log
   "C-c C-c" 'g-js-visit-coffee)
 
 (g-when-starting-mode js
