@@ -51,6 +51,8 @@ class App
     true
   rescue Errno::ESRCH
     false
+  rescue Errno::EPERM
+    true
   end
 
   def sh(*command, background: false)
