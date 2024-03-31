@@ -54,14 +54,15 @@
 (global-set-key (kbd "C-c m y") 'python-mode)
 
 ;;; Visit files
-(global-set-key (kbd "C-c f i") (g-simple-command (find-file "~/.emacs.d/init.el")))
-(global-set-key (kbd "C-c f c") (g-simple-command (find-file "~/.emacs.d/custom.el")))
-(global-set-key (kbd "C-c f s") (g-simple-command (find-file "~/.emacs.d/site.el")))
+(global-set-key (kbd "C-c v i") (g-simple-command (find-file "~/.emacs.d/init.el")))
+(global-set-key (kbd "C-c v c") (g-simple-command (find-file "~/.emacs.d/custom.el")))
+(global-set-key (kbd "C-c v s") (g-simple-command (find-file "~/.emacs.d/site.el")))
 
 ;;; Other
 (global-set-key (kbd "C-c =")     'smart-align)
 (global-set-key (kbd "C-c c")     'g-comment-or-uncomment)
 (global-set-key (kbd "C-c d")     'g-insert-breakpoint)
+(global-set-key (kbd "C-c f")     'flip-list)
 (global-set-key (kbd "C-c i")     'manual-entry)
 (global-set-key (kbd "C-c e")     'eval-current-buffer)
 (global-set-key (kbd "C-c g o")   'git-link)
