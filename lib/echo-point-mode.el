@@ -30,29 +30,19 @@
 See the `echo-point-mode' function for more information.")
 
 ;;;###autoload
-(defun echo-point-mode (&optional arg)
+(define-minor-mode echo-point-mode
   "Toggle, enable, or disable echo-point-mode.
 
 When echo-point-mode is enabled, point is echoed after every
 command.  Intended as a development aid."
-  (interactive)
-  (let ((old-state echo-point-mode))
-    (setq echo-point-mode
-          (if (null arg) (not echo-point-mode)
-            (> (prefix-numeric-value arg) 0)))
-    (when (not (eq old-state echo-point-mode))
-      (if echo-point-mode
-          (echo-point-mode:enable)
-        (echo-point-mode:disable)))))
+  :lighter " point"
+  :after-hook (echo-point-mode:after-hook))
 
-(defun echo-point-mode:enable ()
-  (add-hook 'post-command-hook 'echo-point-mode:show-point))
-
-(defun echo-point-mode:disable ()
-  (remove-hook 'post-command-hook 'echo-point-mode:show-point))
-
-(add-minor-mode 'echo-point-mode nil)
+(defun echo-point-mode:after-hook ()
+  (if echo-point-mode
+      (add-hook 'post-command-hook 'echo-point-mode:show-point)
+    (remove-hook 'post-command-hook 'echo-point-mode:show-point)))
 
 ;;;; Provide
 
-(provide 'echo-point)
+(provide 'echo-point-mode)
