@@ -239,8 +239,9 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   (put 'ruby-mode 'g-breakpoint-code "require 'debugger'; debugger"))
 
 (g-define-mode-keys ruby
+  "C-c f b" 'ruby-flip-block
   "C-c C-l" 'g-ruby-load-buffer
-  "C-c s"   'g-ruby-insert-heading
+  "C-c s" 'g-ruby-insert-heading
 )
 
 ;;;; TypeScript
