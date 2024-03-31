@@ -4,6 +4,7 @@
  '(aquamacs-customization-version-id 150 t)
  '(aquamacs-save-options-on-quit nil)
  '(backup-directory-alist (list (cons "" (concat rc-dir "/backups/"))))
+ '(dabbrev-case-fold-search nil)
  '(dired-use-ls-dired nil)
  '(fill-column 80)
  '(git-link-open-in-browser t)
