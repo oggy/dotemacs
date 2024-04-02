@@ -21,6 +21,7 @@
 (g-ensure-package 'markdown-mode)
 (g-ensure-package 'nim-mode)
 (g-ensure-package 'projectile)
+(g-ensure-package 'projectile-ripgrep)
 (g-ensure-package 'rust-mode)
 (g-ensure-package 'sass-mode)
 (g-ensure-package 'scala-mode)
