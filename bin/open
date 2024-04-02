@@ -14,22 +14,34 @@ class App
 
     ENV['G_START_DIR'] = Dir.pwd
 
-    if args.empty?
-      candidates = []
-    else
-      path = File.expand_path(args.last)
-      candidates = Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
-        pid = server_path[/\d+/]
-        roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
-        pid && pid_live?(pid) && roots.any? { |r| path == r || path.start_with?("#{r}/") }
+    path = args.last and
+      path = File.expand_path(prune_prefix(path))
+
+    candidates =
+      if path.nil? || File.directory?(path)
+        []
+      else
+        Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
+          pid = server_path[/\d+/]
+          roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
+          pid && pid_live?(pid) && roots.any? { |r| path == r || path.start_with?("#{r}/") }
+        end
       end
-    end
 
     if candidates.empty?
       sh EMACS, '--debug-init', *args, background: true
     else
       sh EMACSCLIENT, '-n', '-s', File.basename(candidates[0]), *args
     end
+  end
+
+  def prune_prefix(path)
+    return nil if path.nil?
+    # Remove a/ or b/ prefix, because I often paste paths from git diffs.
+    if !File.exist?(path)
+      path.sub!(%r'\A[ab]/', '')
+    end
+    path
   end
 
   def parse_args(args)
