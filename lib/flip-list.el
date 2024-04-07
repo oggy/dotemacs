@@ -12,6 +12,18 @@
 ;;       2,
 ;;     )
 
+(defmacro flip-list:with-match (var &rest forms)
+  `(condition-case err
+       (progn
+         (let ((,var (flip-list:find-match)))
+           ,@forms
+           (when ,var
+             (flip-list:free-match ,var))))
+     (err
+      (when ,var
+        (flip-list:free-match ,var))
+      (signal (car err) (cdr err)))))
+
 ;;;###autoload
 (defun flip-list ()
   "Flip a delimited list between one-line and multiline.
@@ -93,18 +105,6 @@ And (\"[\" \"]\" \"|\" t) flips between:
 (defun flip-list:current-include-trailing-separator-p ()
   (or (get major-mode 'flip-list:include-trailing-separator-p)
       flip-list:include-trailing-separator-p))
-
-(defmacro flip-list:with-match (var &rest forms)
-  `(condition-case err
-       (progn
-         (let ((,var (flip-list:find-match)))
-           ,@forms
-           (when ,var
-             (flip-list:free-match ,var))))
-     (err
-      (when ,var
-        (flip-list:free-match ,var))
-      (signal (car err) (cdr err)))))
 
 (defun flip-list:find-match ()
   (save-excursion

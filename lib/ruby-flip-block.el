@@ -12,6 +12,18 @@
 ;;       b
 ;;     end
 
+(defmacro ruby-flip-block:with-match (var &rest forms)
+  `(condition-case err
+       (progn
+         (let ((,var (ruby-flip-block:find-match)))
+           ,@forms
+           (when ,var
+             (ruby-flip-block:free-match ,var))))
+     (err
+      (when ,var
+        (ruby-flip-block:free-match ,var))
+      (signal (car err) (cdr err)))))
+
 ;;;###autoload
 (defun ruby-flip-block ()
   "Flip a delimited list between one-line and multiline.
@@ -38,18 +50,6 @@ flipped."
        (ruby-flip-block:contract match)
      (ruby-flip-block:expand match))
    ))
-
-(defmacro ruby-flip-block:with-match (var &rest forms)
-  `(condition-case err
-       (progn
-         (let ((,var (ruby-flip-block:find-match)))
-           ,@forms
-           (when ,var
-             (ruby-flip-block:free-match ,var))))
-     (err
-      (when ,var
-        (ruby-flip-block:free-match ,var))
-      (signal (car err) (cdr err)))))
 
 (defun ruby-flip-block:find-match ()
   (save-excursion
