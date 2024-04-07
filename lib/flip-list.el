@@ -59,7 +59,7 @@ list is flipped."
    ))
 
 ;;;###autoload
-(defvar flip-list:delimiters
+(defvar flip-list:delimiters '(("(" ")" ",") ("[" "]" ",") ("{" "}" ","))
   "List of delimiter pairs used by flip-list.
 
 Each element is a list of the form:
@@ -92,11 +92,25 @@ And (\"[\" \"]\" \"|\" t) flips between:
   3 |
 ]
 
-(Assuming flip-list:include-trailing-separator-p is t.)"
-  '(("(" ")" ",") ("[" "]" ",") ("{" "}" ",")))
+(Assuming flip-list:include-trailing-separator-p is t.)")
 
 ;;;###autoload
-(defvar flip-list:include-trailing-separator-p t)
+(defvar flip-list:include-trailing-separator-p t
+  "Non-nil if a trailing separator should be added by flip-list.
+
+Only when expanding. For example, when non-nil:
+
+    foo(
+      1,
+      2,
+    )
+
+When nil:
+
+    foo(
+      1,
+      2
+    )")
 
 (defun flip-list:current-delimiters ()
   (or (get major-mode 'flip-list:delimiters)
