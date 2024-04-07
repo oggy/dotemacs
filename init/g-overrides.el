@@ -25,8 +25,9 @@
       (replace-in-string root "/*\\'" ""))))
 
 (defun g-frame-title-base ()
-  (let ((titles (mapcar (lambda (root) (g-titleize (file-name-base root)))
-                        (g-project-roots))))
+  (let* ((roots (if g-start-dir (list g-start-dir) (g-project-roots)))
+         (titles (mapcar (lambda (root) (g-titleize (file-name-base root)))
+                         roots)))
     (string-join titles ", ")))
 
 (defun g-set-frame-titles (&optional frame)
