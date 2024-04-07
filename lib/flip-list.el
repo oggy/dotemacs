@@ -146,7 +146,7 @@ And (\"[\" \"]\" \"|\" t) flips between:
       (goto-char (- end (length closer)))
       (skip-syntax-backward " ")
       (when (string= (buffer-substring (- (point) (length separator)) (point)) separator)
-        (delete-backward-char (length separator))
+        (delete-char (- (length separator)))
         (if inner-space-p (just-one-space) (delete-horizontal-space))))))
 
 (defun flip-list:expand (match)
