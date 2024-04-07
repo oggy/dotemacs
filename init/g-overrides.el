@@ -20,8 +20,8 @@
 ;; Infer project name in frame titles.
 (defun g-buffer-project-root (buffer)
   "Get the root path of the project of BUFFER's file, if any."
-  (unless (string-match "\\`[* ]" (buffer-name buffer))
-    (let* ((root (with-current-buffer buffer (projectile-project-root))))
+  (let* ((root (with-current-buffer buffer (projectile-project-root))))
+    (when root
       (replace-in-string root "/*\\'" ""))))
 
 (defun g-frame-title-base ()
