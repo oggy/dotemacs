@@ -22,7 +22,7 @@ class App
         []
       else
         Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
-          pid = server_path[/\d+/]
+          pid = File.basename(server_path)[/\d+/]
           roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
           pid && pid_live?(pid) && roots.any? { |r| path == r || path.start_with?("#{r}/") }
         end
