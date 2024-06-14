@@ -18,7 +18,7 @@ class App
       path = File.expand_path(prune_prefix(path))
 
     candidates =
-      if path.nil? || File.directory?(path)
+      if path.nil?
         []
       else
         Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
