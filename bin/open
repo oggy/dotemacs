@@ -39,7 +39,7 @@ class App
     return nil if path.nil?
     # Remove a/ or b/ prefix, because I often paste paths from git diffs.
     if !File.exist?(path)
-      path.sub!(%r'\A[ab]/', '')
+      path = path.sub(%r'\A[ab]/', '')
     end
     path
   end
