@@ -99,6 +99,8 @@
 ;; Save & restore open files.
 (desktop-save-mode 1)
 
+(add-hook 'write-file-functions 'delete-trailing-whitespace)
+
 ;; Mode line
 (line-number-mode 1)
 (column-number-mode 1)
