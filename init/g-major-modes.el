@@ -163,7 +163,9 @@ the form accepted by `kbd'.  DEF is of the form accepted by
 
 ;;;; CSS
 
-(setq css-indent-offset 2)
+(g-when-starting-mode css
+  (setq css-indent-offset 2)
+  (setq css-fontify-colors nil))
 
 ;;;; Markdown
 
