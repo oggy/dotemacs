@@ -10,6 +10,7 @@
 (g-ensure-package 'clojure-mode)
 (g-ensure-package 'coffee-mode)
 (g-ensure-package 'dockerfile-mode)
+(g-ensure-package 'eat)
 (g-ensure-package 'elixir-mode)
 (g-ensure-package 'git-link)
 (g-ensure-package 'go-mode)
