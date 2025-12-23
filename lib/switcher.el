@@ -29,6 +29,15 @@ recently switched-to ones since switcher was loaded.")
 (defvar switcher-ignore-buffer-switch nil
   "Prevents buffer switches modifying the order of switcher buffers.")
 
+(defvar switcher-root-function
+  (if (functionp 'projectile-project-root) 'projectile-project-root 'switcher-home-root)
+  "Function that returns the project root.
+
+Directories will be shown relative to this directory.")
+
+(defun switcher-home-root ()
+  (expand-file-name "~"))
+
 (defun switcher-buffer-list-updated ()
   (unless switcher-ignore-buffer-switch
     (switcher-move-current-buffer-to-front)))
@@ -96,7 +105,7 @@ recently switched-to ones since switcher was loaded.")
   (let* ((file-name (buffer-file-name buffer)))
     (if file-name
         (let ((truename (file-truename (file-name-directory file-name)))
-              (root (with-current-buffer buffer (projectile-project-root))))
+              (root (with-current-buffer buffer (funcall switcher-root-function))))
           (replace-regexp-in-string
            "/\\'"
            ""
