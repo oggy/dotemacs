@@ -1,3 +1,5 @@
+(require 'sgml-mode)
+
 ;;;###autoload
 (defun g-html-close-tag ()
   "Insert an indented closing tag on its own line."
