@@ -9,7 +9,7 @@
         (progn
           (while (not (zerop count))
             (when (/= (forward-line sign) 0)
-              (error))
+              (error ""))
             (setq s (save-excursion
                       (back-to-indentation)
                       (current-column))
