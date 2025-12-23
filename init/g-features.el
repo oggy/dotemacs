@@ -70,9 +70,6 @@
 ;; Don't add newlines by default.
 (setq-default require-final-newline nil)
 
-;; Only let files set "safe" variables.
-(setq enable-local-variables 'safe)
-
 ;; Put *scratch* in emacs-lisp-mode. (Using custom-set-variables does
 ;; not seem to work for this in Aquamacs 2.1.)
 (setq initial-major-mode 'emacs-lisp-mode)
