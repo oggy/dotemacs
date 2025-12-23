@@ -143,10 +143,12 @@
   (interactive "MMigration name: ")
   (let* ((underscored-name (replace-regexp-in-string "[^A-Za-z0-9]+" "_" name))
          (module (rails-camelize underscored-name))
-         (vars (make-hash_table :test 'equal)))
+         (vars (make-hash-table :test 'equal))
+         (timestamp (format-time-string "%Y%m%d%H%M%S" (current-time) t)))
     (find-file (concat rails-root "/db/migrate/" timestamp "_" underscored-name ".rb"))
     (puthash "module" module vars)
-    (rails-load-template (concat rails-templates-directory "/migration.rb") vars)))
+    (when (string= (buffer-string) "")
+      (rails-load-template (concat rails-templates-directory "/migration.rb") vars))))
 
 ;;;; ActiveSupport
 
