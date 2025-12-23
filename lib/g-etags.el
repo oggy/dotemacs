@@ -1,5 +1,8 @@
 (eval-and-compile (require 'em-glob))
 
+(defvar g-etags-bin "ctags"
+  "Path to etags executable.")
+
 ;;;###autoload
 (defun g-etags-make (glob out)
   "Output a tags file OUT for files matching GLOB.
