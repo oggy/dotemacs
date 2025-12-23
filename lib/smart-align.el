@@ -9,9 +9,6 @@
 ;; otherwise.
 ;;
 
-(eval-when-compile
-  (require 'cl))
-
 ;;;###autoload
 (defun smart-align (start end string &optional regexp-p)
   "Align the region intelligently.
@@ -99,7 +96,7 @@ interactively), then STRING is treated as a regular expression."
         matches)
 )
 
-(defstruct smart-align-match
+(cl-defstruct smart-align-match
   (column)  ;; the min column the alignment-token may be at
   (start)   ;; the start of the alignment-token match
   (end)     ;; the end of the alignment-token match

@@ -40,9 +40,6 @@
 
 ;;;; Compiler Support
 
-(eval-when-compile
-  (require 'cl))
-
 ;;;; Commands
 
 ;;;###autoload
@@ -94,17 +91,17 @@
            ;; transform from point to the end of the ARG-th next word
            (save-excursion
              (setq s (point))
-             (loop for i from 1 to arg do
-                   (skip-syntax-forward "^w_")
-                   (skip-syntax-forward "w_"))
+             (cl-loop for i from 1 to arg do
+                      (skip-syntax-forward "^w_")
+                      (skip-syntax-forward "w_"))
              (setq e (point))))
           ((< arg 0)
            ;; transform from point to the beginning of the ARG-th previous word
            (save-excursion
              (setq e (point))
-             (loop for i from 1 to arg do
-                   (skip-syntax-backward "^w_")
-                   (skip-syntax-backward "w_"))
+             (cl-loop for i from 1 to arg do
+                      (skip-syntax-backward "^w_")
+                      (skip-syntax-backward "w_"))
              (setq s (point))))
           (t ;; (= arg 0)
            ;; transform the word point is on (if any)
