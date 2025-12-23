@@ -41,6 +41,15 @@ out how to reslosh the region."
     (set-marker s nil)
     (set-marker e nil)))
 
+(defmacro slosh-at-each-eol (s e &rest forms)
+  `(save-excursion
+    (goto-char ,s)
+    (end-of-line)
+    ,@forms
+    (while (and (= (forward-line) 0)
+                (progn (end-of-line) (< (point) ,e)))
+      ,@forms)))
+
 (defun slosh-unslosh-region (s e)
   (slosh-at-each-eol s e
     (delete-horizontal-space)
@@ -56,19 +65,10 @@ out how to reslosh the region."
     max))
 
 (defun slosh-slosh-region (s e column)
-    (slosh-at-each-eol s e
-      (if (> column (current-column))
-          (insert (make-string (- column (current-column)) ?\ )))
-      (insert " \\")))
-
-(defmacro slosh-at-each-eol (s e &rest forms)
-  `(save-excursion
-    (goto-char ,s)
-    (end-of-line)
-    ,@forms
-    (while (and (= (forward-line) 0)
-                (progn (end-of-line) (< (point) ,e)))
-      ,@forms)))
+  (slosh-at-each-eol s e
+    (if (> column (current-column))
+        (insert (make-string (- column (current-column)) ?\ )))
+    (insert " \\")))
 
 (defun slosh-num-eol-sloshes ()
   (save-excursion
