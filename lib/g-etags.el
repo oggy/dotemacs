@@ -23,9 +23,6 @@ Uses variable `g-etags-bin'."
   (if (file-exists-p out) (delete-file out))
   (let* ((paths (eshell-extended-glob glob)))
     (apply 'call-process g-etags-bin nil nil nil
-           (nconc '("-e") paths (list "-o" out)))))
-
-(defvar g-etags-bin "ctags"
-  "Path to etags executable.")
+           (append '("-e") paths (list "-o" out)))))
 
 (provide 'g-etags)
