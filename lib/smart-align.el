@@ -67,7 +67,7 @@ interactively), then STRING is treated as a regular expression."
     (goto-char (point-min))
     (while (not done)
       (save-excursion
-        (when (funcall search-function alignment-token (point-at-eol) t)
+        (when (funcall search-function alignment-token (pos-eol) t)
           (let ((match (make-smart-align-match
                         :column (save-excursion
                                   (goto-char (match-beginning 0))

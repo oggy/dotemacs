@@ -4,7 +4,7 @@
 (declare-function c-fill-paragraph "cc-cmds" (&optional arg))
 
 (defun g-cc-replace-in-string (target old new &optional literal)
-  "Replace all matches in STR for REGEXP with NEWTEXT string, 
+  "Replace all matches in STR for REGEXP with NEWTEXT string,
  and returns the new string."
   (replace-regexp-in-string old new target nil literal))
 
@@ -36,7 +36,7 @@
                 "#endif  // ndef " tok
                 "\n")))
     (when font-lock-mode
-      (font-lock-fontify-buffer))))
+      (font-lock-ensure))))
 
 ;;;###autoload
 (defun g-cc-insert-ifndef-wrap (&optional s e)
@@ -168,7 +168,7 @@ for a heading and insert it."
       (delete-blank-lines)
       (newline-and-indent)
       (insert "// " (make-string 10 delim))
-      (setq region (point-at-bol))
+      (setq region (pos-bol))
       (unless (= level 1)
         (newline-and-indent)
         (insert "//"))
@@ -251,8 +251,7 @@ for a heading and insert it."
             (skip-chars-forward "/")
             (skip-syntax-forward "-")
             (just-one-space)
-            (insert (make-string (/ (- fill-column (- (point-at-eol)
-                                                      (point-at-bol)))
+            (insert (make-string (/ (- fill-column (- (pos-eol) (pos-bol)))
                                     2) ? ))
             (forward-line 1))
           (set-marker start nil)

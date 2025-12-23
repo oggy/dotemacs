@@ -215,7 +215,7 @@ return nil."
     (if (or (null startinfo)
             (and (> (cadr startinfo) (current-column))
                  (not (string-match "^[ \t]*$" (buffer-substring
-                                                (point-at-bol)
+                                                (pos-bol)
                                                 (point))))))
         ;; not in a comment
         nil
@@ -407,7 +407,7 @@ ends at the end of the last comment line."
       ;(insert "#")
       ;(newline-and-indent)
       (insert "# " (make-string 10 delim))
-      (setq region (cons (point-at-bol) nil))
+      (setq region (cons (pos-bol) nil))
       (newline-and-indent)
       (when blanksp
         (insert "#")
@@ -492,8 +492,7 @@ ends at the end of the last comment line."
           (skip-chars-forward "#")
           (skip-syntax-forward "-")
           (just-one-space)
-          (insert (make-string (/ (- fill-column (- (point-at-eol)
-                                                    (point-at-bol)))
+          (insert (make-string (/ (- fill-column (- (pos-eol) (pos-bol)))
                                   2) ? ))
           (forward-line 1))
         (set-marker start nil)

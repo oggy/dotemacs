@@ -16,9 +16,9 @@ To append a trailing backslash to a line or all lines in a region."
   (cond
    ((region-active-p)
     (slosh-region (region-beginning) (region-end)))
-   ((eq (char-before (point-at-eol)) ?\\)
-    (let ((region (cons (point-at-bol)
-                        (1+ (point-at-eol)))))
+   ((eq (char-before (pos-eol)) ?\\)
+    (let ((region (cons (pos-bol)
+                        (1+ (pos-eol)))))
       (setq region (slosh-extend-region-backwards region))
       (setq region (slosh-extend-region-forwards  region))
       (slosh-region (car region) (cdr region))))
@@ -72,9 +72,9 @@ out how to reslosh the region."
 
 (defun slosh-num-eol-sloshes ()
   (save-excursion
-    (goto-char (point-at-bol))
+    (goto-char (pos-bol))
     (save-match-data
-      (search-forward-regexp "\\\\*$" (point-at-eol))
+      (search-forward-regexp "\\\\*$" (pos-eol))
       (length (match-string 0)))))
 
 (defun slosh-extend-region-backwards (region)
@@ -83,7 +83,7 @@ out how to reslosh the region."
     (save-excursion
       (goto-char s)
       (while (and (eq (forward-line -1) 0)
-                  (eq (char-before (point-at-eol)) ?\\))
+                  (eq (char-before (pos-eol)) ?\\))
         (setq s (point)))
       (cons s e))))
 
@@ -92,7 +92,7 @@ out how to reslosh the region."
         (e (cdr region)))
     (save-excursion
       (goto-char e)
-      (while (and (eq (char-before (point-at-eol)) ?\\)
+      (while (and (eq (char-before (pos-eol)) ?\\)
                   (eq (forward-line 1) 0))
         (setq e (point)))
       (cons s e))))

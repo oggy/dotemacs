@@ -15,7 +15,7 @@
                       (current-column))
                   e (save-excursion
                       (end-of-line)
-                      (skip-syntax-backward "-" (point-at-bol))
+                      (skip-syntax-backward "-" (pos-bol))
                       (current-column)))
             (when (and (<= s goal-col)
                        (<= goal-col e)
