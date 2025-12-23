@@ -13,8 +13,8 @@
 
 ;;;###autoload
 (defun lorem-ipsum (&optional num-paragraphs)
-  (interactive "p")
   "Insert NUM-PARAGRAPHS of lorem ipsum text."
+  (interactive "p")
   (lorem-ipsum:insert-within (current-column) fill-column num-paragraphs))
 
 (defun lorem-ipsum:insert-within (start-column end-column num-paragraphs)

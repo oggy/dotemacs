@@ -5,7 +5,6 @@
   "Output a tags file OUT for files matching GLOB.
 
 Uses variable `g-etags-bin'."
-  (require 'etags)
   (interactive (let* ((file-name (buffer-file-name)))
                  (list
                   (let* ((dir-name (if file-name (file-name-directory file-name) nil))
@@ -16,6 +15,7 @@ Uses variable `g-etags-bin'."
                                      (concat (file-name-directory file-name) "TAGS")
                                    (expand-file-name "~/TAGS"))))
                     (read-string "Output file: " initial)))))
+  (require 'etags)
   (setq out (expand-file-name out))
   (if (file-exists-p out) (delete-file out))
   (let* ((paths (eshell-extended-glob glob)))
