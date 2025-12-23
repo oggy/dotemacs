@@ -230,10 +230,6 @@ recently switched-to ones since switcher was loaded.")
        overlay-properties)
       overlay)))
 
-(defun switcher-menu-overlays-at (pos type)
-  (seq-filter (lambda (overlay) (overlay-get overlay 'switcher-menu-item))
-              (overlays-at pos)))
-
 (defun switcher-hide-menu ()
   (interactive)
   (switcher-ignoring-buffer-switch
