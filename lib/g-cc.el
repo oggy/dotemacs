@@ -108,7 +108,7 @@ first comment line and ends at the end of the last comment line."
 (let* ((pt (point))
        (comment-re "\\s-*//")
        (delim-re (concat comment-re " " delim "\\s-*$"))
-       s e)
+       s)
   (save-excursion
     (save-restriction
       (widen)

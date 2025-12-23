@@ -58,8 +58,7 @@
   "Initialize the buffer for Rails mode."
   (interactive)
   (let* ((path (buffer-file-name))
-         (computed-rails-root (rails-root path))
-         constant-name)
+         (computed-rails-root (rails-root path)))
     (when (and path computed-rails-root)
       (setq rails-root computed-rails-root)
       (when (rails-current-buffer-empty-p)
@@ -135,7 +134,7 @@
 (defun rails-insert-template (path vars)
   (insert-file-contents path)
   (goto-char (point-min))
-  (let* ((quoted-names (rails-mapcar-hash (lambda (k v) (regexp-quote k)) vars))
+  (let* ((quoted-names (rails-mapcar-hash (lambda (k _v) (regexp-quote k)) vars))
          (vars-regexp (concat "#{\\(" (rails-list-join quoted-names "\\|") "\\)}")))
     (while (search-forward-regexp vars-regexp nil t)
       (replace-match (gethash (match-string 1) vars)))))
@@ -214,12 +213,11 @@
     (reverse results)))
 
 (defun rails-list-join (list delimiter)
-  (let ((length (length list)))
-    (if (null list)
-        ""
-      (rails-list-inject (mapcar (lambda (s) (format "%s" s)) (cdr list))
-                         (format "%s" (car list))
-                         (lambda (string result) (concat result delimiter string))))))
+  (if (null list)
+      ""
+    (rails-list-inject (mapcar (lambda (s) (format "%s" s)) (cdr list))
+                       (format "%s" (car list))
+                       (lambda (string result) (concat result delimiter string)))))
 
 (defun rails-list-inject (list initial function)
   (while list

@@ -85,8 +85,7 @@ interactively), then STRING is treated as a regular expression."
 
 (defun smart-align-align-rows (alignment-column matches left-padding right-padding)
   (mapc (lambda (match)
-          (let ((column (smart-align-match-column match))
-                (start (smart-align-match-start match))
+          (let ((start (smart-align-match-start match))
                 (end (smart-align-match-end match)))
             ;; Start at the end so the insertions don't mess up the
             ;; positions in `matches'.

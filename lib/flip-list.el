@@ -142,8 +142,7 @@ When nil:
           (inner-space-p (nth 3 (flip-list:match-delimiter match)))
           (end (flip-list:match-end match))
           (continue t)
-          (at-opener t)
-          at-closer)
+          (at-opener t))
       (goto-char (flip-list:match-begin match))
       (forward-char (length opener))
       (while continue
@@ -170,8 +169,7 @@ When nil:
           (opener (nth 0 (flip-list:match-delimiter match)))
           (closer (nth 1 (flip-list:match-delimiter match)))
           (separator (nth 2 (flip-list:match-delimiter match)))
-          (continue t)
-          at-closer)
+          (continue t))
       (goto-char begin)
       (forward-char (length opener))
       (while continue
@@ -200,7 +198,7 @@ When nil:
 
 (defun flip-list:go-to-opener ()
   (interactive)
-  (condition-case var
+  (condition-case nil
       (let (delimiter)
         (backward-up-list)
         (while (null (setq delimiter (seq-find 'flip-list:at-opener (flip-list:current-delimiters))))

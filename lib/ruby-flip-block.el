@@ -67,13 +67,10 @@ flipped."
 
 (defun ruby-flip-block:contract (match)
   (save-excursion
-    (let ((opener (ruby-flip-block:match-opener match))
-          (closer (ruby-flip-block:match-closer match))
-          (begin (ruby-flip-block:match-begin match))
+    (let ((begin (ruby-flip-block:match-begin match))
           (end (ruby-flip-block:match-end match))
           (continue t)
-          (at-opener t)
-          at-closer)
+          (at-opener t))
       (goto-char begin)
       (delete-char 2)
       (insert "{")
@@ -99,9 +96,7 @@ flipped."
 (defun ruby-flip-block:expand (match)
   (save-excursion
     (let ((begin (ruby-flip-block:match-begin match))
-          (end (ruby-flip-block:match-end match))
-          (continue t)
-          at-closer)
+          (end (ruby-flip-block:match-end match)))
       (goto-char begin)
       (delete-char 1)
       (insert "do")
@@ -128,8 +123,8 @@ flipped."
 
 (defun ruby-flip-block:go-to-opener ()
   (interactive)
-  (condition-case var
-      (let (delimiter)
+  (condition-case nil
+      (progn
         (backward-up-list)
         (while (not (looking-at "\\bdo\\b\\|{"))
           (backward-up-list))
