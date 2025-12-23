@@ -135,7 +135,7 @@ recently switched-to ones since switcher was loaded.")
   "Timer to deactivate the Switcher menu, when active.")
 
 (defvar switcher-timeout 2
-  "Number of seconds after which to automatically hide the Switcher menu (nil for never).")
+  "Number of seconds after which to hide the Switcher menu (nil for never).")
 
 (defun switcher-bump-timeout ()
   (when switcher-timer
