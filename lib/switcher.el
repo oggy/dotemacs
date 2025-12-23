@@ -270,6 +270,7 @@ Directories will be shown relative to this directory.")
   :init-value nil
   :keymap switcher-active-mode-map
   :interactive nil
+  :group 'frames
   (if switcher-active-mode
       (add-hook 'pre-command-hook 'switcher-active-pre-command)
     (remove-hook 'pre-command-hook 'switcher-active-pre-command)))
