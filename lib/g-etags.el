@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (eval-and-compile (require 'em-glob))
 
 (defvar g-etags-bin "ctags"

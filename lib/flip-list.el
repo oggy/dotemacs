@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; Provides a command flip-list, which Flips between single-line and multi-line
 ;; lists of things.
 ;;

@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;;
 ;;;; Commands to transform the words around point or in the region.
 ;;;;

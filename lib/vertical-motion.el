@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;; Private
 
 (defun vertical-move-line (count)

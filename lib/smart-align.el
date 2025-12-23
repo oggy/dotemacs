@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;; smart-align.el -- a simpler-but-smart `align'.
 ;;
 ;; Bind a key to `smart-align'.

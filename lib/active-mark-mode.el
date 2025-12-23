@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (defvar active-mark-mode-map (make-sparse-keymap)
   "Keymap enabled while active-mark-mode is enabled.")
 (define-key active-mark-mode-map (kbd ">") 'active-mark-indent-region)

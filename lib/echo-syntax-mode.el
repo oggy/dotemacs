@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;;
 ;;;; Echo the syntax of point wherever you go.
 ;;;;

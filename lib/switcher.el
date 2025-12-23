@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (defvar switcher-menu-frame nil
   "The Switcher menu frame, while active.")
 

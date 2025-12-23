@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (declare-function region-active-p "simple" nil)
 
 (require 'simple)

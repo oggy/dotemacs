@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;; Minor mode for buffers in a Rails application.
 
 (defvar rails-mode nil

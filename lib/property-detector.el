@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;;
 ;;;; Like wandering around with a metal detector, only it picks up the
 ;;;; text properties at point.

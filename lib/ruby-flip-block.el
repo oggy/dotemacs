@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; Provides a command ruby-flip-block, which Flips between single-line and
 ;; multi-line ruby blocks.
 ;;

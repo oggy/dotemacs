@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;;
 ;;;; Echo text properties at point wherever you go.
 ;;;;

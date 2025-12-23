@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;;
 ;;;; Echo the value of point wherever you go.
 ;;;;

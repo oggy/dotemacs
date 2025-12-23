@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;(eval-when-compile (require 'subr))
 (declare-function region-active-p "simple" nil)
 (declare-function c-indent-line "cc-cmds" (&optional syntax quiet ignore-point-pos))

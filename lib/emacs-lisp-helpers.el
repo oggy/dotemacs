@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;;###autoload
 (defun g-show-region (s e &optional buffer)
   "Dance around a region for few seconds."
