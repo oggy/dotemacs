@@ -103,6 +103,9 @@
 (column-number-mode 1)
 (setq mode-line-position-column-line-format (list " L%l C%c"))
 
+;; Prune buffers at midnight.
+(midnight-mode)
+
 (when aquamacsp
   (tabbar-mode 0)
   ;; Prevent Aquamacs from opening every buffer in a new frame.
