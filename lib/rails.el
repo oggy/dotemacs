@@ -11,6 +11,12 @@
 (defvar rails-templates-directory "~/.emacs.d/etc/rails/templates"
   "Directory containing templates for rails-mode.")
 
+(defvar rails-mode-map (make-sparse-keymap)
+  "Keymap for rails-mode.")
+(unless (assoc 'rails-mode minor-mode-map-alist)
+  (add-to-list 'minor-mode-map-alist (cons 'rails-mode rails-mode-map)))
+(define-key rails-mode-map (kbd "C-c v t") 'rails-visit-test-file)
+
 ;;;###autoload
 (defun rails-mode (&optional arg)
   "Rails minor mode."
@@ -150,6 +156,24 @@
     (puthash "module" module vars)
     (when (string= (buffer-string) "")
       (rails-load-template (concat rails-templates-directory "/migration.rb") vars))))
+
+(defun rails-visit-test-file ()
+  (interactive)
+  (let* ((this-path (file-relative-name (buffer-file-name (current-buffer)) g-start-dir))
+         (this-dir (file-name-directory this-path))
+         (this-base (file-name-base this-path))
+         (test-rel-dir (replace-regexp-in-string "^app/" "" this-dir))
+         (candidates (list
+                      (concat g-start-dir "/spec/" test-rel-dir (concat this-base "_spec.rb"))
+                      (concat g-start-dir "/test/" test-rel-dir (concat "test_" this-base ".rb"))
+                      (concat g-start-dir "/test/" test-rel-dir (concat this-base "_test.rb"))))
+         (found-path (seq-find 'file-exists-p candidates)))
+    (if found-path
+        (find-file-other-window found-path)
+      (message
+       "No test file found for %s. Looked for:%s"
+       this-path
+       (mapcar (lambda (path) (concat "\n  * " path)) candidates)))))
 
 ;;;; ActiveSupport
 
