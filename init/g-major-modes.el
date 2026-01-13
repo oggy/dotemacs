@@ -246,6 +246,15 @@ the form accepted by `kbd'.  DEF is of the form accepted by
   "C-c s" 'g-ruby-insert-heading
 )
 
+;;;; SMerge
+
+(g-define-mode-keys smerge
+  "C-c 6 l" 'smerge-keep-lower
+  "C-c 6 n" 'smerge-next
+  "C-c 6 p" 'smerge-prev
+  "C-c 6 u" 'smerge-keep-upper
+)
+
 ;;;; TypeScript
 
 (g-when-starting-mode typescript
