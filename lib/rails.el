@@ -17,6 +17,7 @@
   (add-to-list 'minor-mode-map-alist (cons 'rails-mode rails-mode-map)))
 (define-key rails-mode-map (kbd "C-c v t") 'rails-visit-test-file)
 (define-key rails-mode-map (kbd "C-c c n") 'rails-copy-module-name)
+(define-key rails-mode-map (kbd "C-c r s") 'rails-show-table-schema)
 
 ;;;###autoload
 (defun rails-mode (&optional arg)
@@ -199,6 +200,31 @@ Use the current buffer file name is PATH is nil."
    (when module-name
      (kill-new module-name)
      (message "%s" module-name))))
+
+(defun rails-show-table-schema (table)
+  "Prompt for a table name and display its schema."
+  (interactive
+   (list (completing-read "Table: " (rails-command-output-lines "rails-schema") nil t)))
+  (rails-run-command (concat "rails-schema =" table)))
+
+(defun rails-run-command (command)
+  "Run shell COMMAND in `g-start-dir' and display output in a temporary buffer."
+  (interactive "sCommand: ")
+  (let ((output-buffer (get-buffer-create "*Command Output*")))
+    (with-current-buffer output-buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (let ((default-directory g-start-dir))
+          (call-process-shell-command command nil '(t t)))
+        (goto-char (point-min))
+        (ansi-color-apply-on-region (point-min) (point-max)))
+      (special-mode))
+    (pop-to-buffer output-buffer)))
+
+(defun rails-command-output-lines (command)
+  "Run shell COMMAND and return a list of output lines."
+  (let ((default-directory g-start-dir))
+    (split-string (shell-command-to-string command) "\n" t)))
 
 ;;;; ActiveSupport
 
