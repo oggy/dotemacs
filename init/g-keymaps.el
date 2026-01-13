@@ -60,7 +60,6 @@
 
 ;;; Other
 (global-set-key (kbd "C-c =")     'smart-align)
-(global-set-key (kbd "C-c c")     'g-comment-or-uncomment)
 (global-set-key (kbd "C-c d")     'g-insert-breakpoint)
 (global-set-key (kbd "C-c f l")   'flip-list)
 (global-set-key (kbd "C-c i")     'manual-entry)
