@@ -16,6 +16,7 @@
 (unless (assoc 'rails-mode minor-mode-map-alist)
   (add-to-list 'minor-mode-map-alist (cons 'rails-mode rails-mode-map)))
 (define-key rails-mode-map (kbd "C-c v t") 'rails-visit-test-file)
+(define-key rails-mode-map (kbd "C-c c n") 'rails-copy-module-name)
 
 ;;;###autoload
 (defun rails-mode (&optional arg)
@@ -60,6 +61,16 @@
       (unless (string= path "/")
         (setq path (replace-regexp-in-string "/$" "" path)))))
   path)
+
+(defun rails-relative-path (&optional path)
+  "Return the relative path of PATH from the project root.
+
+Return nil if path is not under a project root.
+
+Use the current buffer file name is PATH is nil."
+  (or path
+      (setq path (buffer-file-name (current-buffer))))
+  (file-relative-name path (rails-project-root path)))
 
 (defun rails-initialize-buffer ()
   "Initialize the buffer for Rails mode."
@@ -159,7 +170,7 @@
 
 (defun rails-visit-test-file ()
   (interactive)
-  (let* ((this-path (file-relative-name (buffer-file-name (current-buffer)) g-start-dir))
+  (let* ((this-path (rails-relative-path))
          (this-dir (file-name-directory this-path))
          (this-base (file-name-base this-path))
          (test-rel-dir (replace-regexp-in-string "^app/" "" this-dir))
@@ -174,6 +185,20 @@
        "No test file found for %s. Looked for:%s"
        this-path
        (mapcar (lambda (path) (concat "\n  * " path)) candidates)))))
+
+(defun rails-copy-module-name ()
+  "Copy the expected toplevel module name for the current file."
+  (interactive)
+  (let* ((path (file-name-sans-extension (rails-relative-path)))
+         (path
+          (cond ((string-match "^app/[^/]*/\\(.*\\)" path)
+                 (match-string 1 path))
+                ((string-match "^lib/\\(.*\\)" path)
+                 (match-string 1 path))))
+        (module-name (when path (rails-camelize path))))
+   (when module-name
+     (kill-new module-name)
+     (message "%s" module-name))))
 
 ;;;; ActiveSupport
 
