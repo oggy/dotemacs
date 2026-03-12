@@ -110,7 +110,7 @@ Directories will be shown relative to this directory.")
           (replace-regexp-in-string
            "/\\'"
            ""
-           (if (and root (string= root (substring truename 0 (length root))))
+           (if (and root (string-prefix-p root truename))
                (substring truename (length root))
              truename)))
       "")))
