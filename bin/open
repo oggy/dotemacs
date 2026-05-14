@@ -14,8 +14,15 @@ class App
 
     ENV['G_START_DIR'] = Dir.pwd
 
-    path = args.last and
-      path = File.expand_path(prune_prefix(path))
+    path = prune_prefix(args.pop || '.')
+    args = [*args, path].compact
+
+    abs_path = File.expand_path(path)
+
+    Dir["#{SERVERS_DIR}/server-*"].each do |server_path|
+      pid = File.basename(server_path)[/\d+/]
+      File.delete(server_path) if pid && !pid_live?(pid)
+    end
 
     candidates =
       if path.nil?
@@ -24,7 +31,7 @@ class App
         Dir["#{SERVERS_DIR}/server-*"].select do |server_path|
           pid = File.basename(server_path)[/\d+/]
           roots = File.readlines(server_path).map { |root| File.expand_path(root.chomp) }
-          pid && pid_live?(pid) && roots.any? { |r| path == r || path.start_with?("#{r}/") }
+          pid && roots.any? { |r| abs_path == r || abs_path.start_with?("#{r}/") }
         end
       end
 
