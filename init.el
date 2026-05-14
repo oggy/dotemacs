@@ -32,6 +32,7 @@
 (require 'g-auto-modes)
 (require 'g-autoloads)
 (require 'g-major-modes)
+(require 'g-projects)
 (require 'g-dired)
 (require 'g-files)
 (require 'g-region)
