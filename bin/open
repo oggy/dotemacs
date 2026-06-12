@@ -14,7 +14,7 @@ class App
 
     ENV['G_START_DIR'] = Dir.pwd
 
-    path = prune_prefix(args.pop || '.')
+    path = resolve_path(args.pop || '.')
     args = [*args, path].compact
 
     abs_path = File.expand_path(path)
@@ -42,13 +42,29 @@ class App
     end
   end
 
-  def prune_prefix(path)
+  def resolve_path(path)
     return nil if path.nil?
+    return path if File.exist?(path)
     # Remove a/ or b/ prefix, because I often paste paths from git diffs.
-    if !File.exist?(path)
-      path = path.sub(%r'\A[ab]/', '')
+    stripped = path.sub(%r'\A[ab]/', '')
+    return stripped if File.exist?(stripped)
+    # Diff paths are relative to the repo root, which may be an ancestor of the
+    # current directory.
+    root = git_root(Dir.pwd)
+    if root
+      candidate = File.join(root, stripped)
+      return candidate if File.exist?(candidate)
     end
-    path
+    stripped
+  end
+
+  def git_root(dir)
+    loop do
+      return dir if File.exist?(File.join(dir, '.git'))
+      parent = File.dirname(dir)
+      return nil if parent == dir
+      dir = parent
+    end
   end
 
   def parse_args(args)
