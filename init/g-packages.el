@@ -27,6 +27,7 @@
 (g-ensure-package 'scala-mode)
 (g-ensure-package 'scss-mode)
 (g-ensure-package 'sqlformat)
+(g-ensure-package 'swift-mode)
 (g-ensure-package 'terraform-mode)
 (g-ensure-package 'typescript-mode)
 (g-ensure-package 'yaml-mode)
