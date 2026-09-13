@@ -208,13 +208,14 @@ Use the current buffer file name is PATH is nil."
   (rails-run-command (concat "rails-schema =" table)))
 
 (defun rails-run-command (command)
-  "Run shell COMMAND in `g-start-dir' and display output in a temporary buffer."
+  "Run shell COMMAND in `rails-root' and display output in a temporary buffer."
   (interactive "sCommand: ")
-  (let ((output-buffer (get-buffer-create "*Command Output*")))
+  (let ((output-buffer (get-buffer-create "*Command Output*"))
+        (dir rails-root))
     (with-current-buffer output-buffer
       (let ((inhibit-read-only t))
         (erase-buffer)
-        (let ((default-directory g-start-dir))
+        (let ((default-directory dir))
           (call-process-shell-command command nil '(t t)))
         (goto-char (point-min))
         (ansi-color-apply-on-region (point-min) (point-max)))
@@ -223,7 +224,7 @@ Use the current buffer file name is PATH is nil."
 
 (defun rails-command-output-lines (command)
   "Run shell COMMAND and return a list of output lines."
-  (let ((default-directory g-start-dir))
+  (let ((default-directory rails-root))
     (split-string (shell-command-to-string command) "\n" t)))
 
 ;;;; ActiveSupport
